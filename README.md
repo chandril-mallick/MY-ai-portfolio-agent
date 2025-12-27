@@ -2,9 +2,9 @@
 
 [![Live Preview](https://img.shields.io/badge/Live-Preview-brightgreen?style=for-the-badge&logo=vercel)](https://my-ai-portfolio-agent.vercel.app/)
 
-A modern, interactive portfolio website built for an Applied Machine Learning Engineer. This project showcases dynamic project fetching from GitHub, FAANG-level system design expertise, and a fluid, "agentic" UI.
+A modern, interactive portfolio website built for an Applied Machine Learning Engineer. This project showcases dynamic project fetching from GitHub, system design expertise, and a fluid, "agentic" UI.
 
-## ✨ Features
+## Features
 
 - **Agentic Interface**: Hero section designed as an AI agent interaction point.
 - **Dynamic Projects**: Automatically fetches and displays repositories from GitHub API with Open Graph images.
@@ -13,7 +13,7 @@ A modern, interactive portfolio website built for an Applied Machine Learning En
 - **SEO Optimized**: Fully configured with Open Graph tags and meta descriptions for social sharing.
 - **Responsive Design**: Mobile-first architecture using Tailwind CSS.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Framework**: React 18 + Vite
 - **Styling**: Tailwind CSS
@@ -21,7 +21,7 @@ A modern, interactive portfolio website built for an Applied Machine Learning En
 - **Visuals**: WebGL (GLSL Shaders)
 - **Icons**: Lucide React
 
-## 🚀 Getting Started
+## Getting Started
 
 1.  **Clone the repository**
     ```bash
@@ -39,13 +39,13 @@ A modern, interactive portfolio website built for an Applied Machine Learning En
     npm run dev
     ```
 
-## 📦 Deployment
+## Deployment
 
 This project is optimized for deployment on Vercel or Netlify.
 
 - **Build Command**: `npm run build`
 - **Output Directory**: `dist`
 
-## 📄 License
+## License
 
 MIT © Chandril Mallick
