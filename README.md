@@ -1,5 +1,7 @@
 # Chandril Mallick | AI & ML Engineer Portfolio
 
+[![Live Preview](https://img.shields.io/badge/Live-Preview-brightgreen?style=for-the-badge&logo=vercel)](https://my-ai-portfolio-agent.vercel.app/)
+
 A modern, interactive portfolio website built for an Applied Machine Learning Engineer. This project showcases dynamic project fetching from GitHub, FAANG-level system design expertise, and a fluid, "agentic" UI.
 
 ## ✨ Features
