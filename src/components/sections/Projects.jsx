@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Github, ExternalLink, ArrowRight, Loader2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Github, ExternalLink, ArrowRight, Loader2, Star, GitFork } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const GITHUB_USERNAME = 'chandril-mallick';
@@ -9,7 +9,6 @@ const COLORS = [
 ];
 
 export default function Projects() {
-  const containerRef = useRef(null);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,20 +16,21 @@ export default function Projects() {
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=8`);
+        const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=12`);
         if (!response.ok) throw new Error('Failed to fetch projects');
         const data = await response.json();
         
-        // Filter out forks if desired, currently keeping them
         const formattedData = data.map((repo, index) => ({
           id: repo.id,
-          title: repo.name.replace(/-/g, ' ').replace(/_/g, ' '), // Humanize names
+          title: repo.name.replace(/-/g, ' ').replace(/_/g, ' '),
           originalName: repo.name,
-          description: repo.description || "No description provided.",
-          tags: repo.language ? [repo.language] : [], // Use language as main tag
+          description: repo.description || "Building the future of AI and software engineering.",
+          tags: repo.language ? [repo.language] : ['Software'],
           link: repo.html_url,
           homepage: repo.homepage,
-          color: COLORS[index % COLORS.length] // Cycle colors
+          stars: repo.stargazers_count,
+          forks: repo.forks_count,
+          color: COLORS[index % COLORS.length]
         }));
 
         setProjects(formattedData);
@@ -46,7 +46,7 @@ export default function Projects() {
 
   if (loading) {
     return (
-      <div className="h-full flex items-center justify-center">
+      <div className="h-64 flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
       </div>
     );
@@ -54,78 +54,83 @@ export default function Projects() {
 
   if (error) {
     return (
-      <div className="h-full flex items-center justify-center text-red-500">
-        <p>Could not load projects. Please check your connection.</p>
+      <div className="h-64 flex flex-col items-center justify-center text-red-500 gap-4">
+        <p className="font-medium text-lg">Could not load projects.</p>
+        <button onClick={() => window.location.reload()} className="px-4 py-2 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">Try Again</button>
       </div>
     );
   }
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex-1 overflow-x-auto overflow-y-hidden no-scrollbar flex items-center gap-6 px-4 md:px-12 py-8" ref={containerRef}>
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {projects.map((project, index) => (
           <motion.div
             key={project.id}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="group relative flex-shrink-0 w-80 md:w-96 h-[450px] bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.05 }}
+            className="group bg-slate-900/40 rounded-[2rem] border border-white/5 overflow-hidden hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-blue-500/30 transition-all duration-500 flex flex-col h-full backdrop-blur-md"
           >
             {/* Project Image - Using GitHub Open Graph */}
-            <div className="h-48 shrink-0 bg-gray-100 relative overflow-hidden group-hover:opacity-100 transition-opacity">
+            <div className="h-48 shrink-0 relative overflow-hidden">
                <img 
                  src={`https://opengraph.githubassets.com/1/${GITHUB_USERNAME}/${project.originalName}`}
                  alt={project.title}
-                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 opacity-80 group-hover:opacity-100"
                  onError={(e) => {
                    e.target.style.display = 'none';
                    e.target.parentElement.classList.add(project.color);
+                   e.target.parentElement.classList.add('opacity-50');
                  }}
                />
-               
-               {/* Fallback pattern if image fails to load or is just the default */}
-               <div className={`absolute inset-0 ${project.color} bg-opacity-20 flex items-center justify-center opacity-0 pointer-events-none -z-10`}>
-                 <span className={`text-4xl font-bold ${project.color.replace('bg-', 'text-')} opacity-50`}>
-                   {project.title.substring(0, 2).toUpperCase()}
-                 </span>
+               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300"></div>
+               <div className="absolute bottom-4 left-4 flex gap-4 text-white text-xs font-bold tracking-widest uppercase">
+                   <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 group-hover:border-blue-500/50 transition-all">
+                      <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" /> {project.stars}
+                   </span>
+                   <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 group-hover:border-blue-500/50 transition-all">
+                      <GitFork className="w-3.5 h-3.5" /> {project.forks}
+                   </span>
                </div>
             </div>
 
-            {/* Content Body - Fills remaining space */}
-            <div className="p-6 flex flex-col flex-1 min-h-0">
-              <h3 className="text-2xl font-bold text-gray-800 mb-2 capitalize truncate leading-tight" title={project.title}>
+            {/* Content Body */}
+            <div className="p-8 flex flex-col flex-1">
+              <h3 className="text-2xl font-black text-white group-hover:text-blue-400 transition-colors capitalize line-clamp-1 mb-3">
                 {project.title}
               </h3>
               
-              <div className="flex-1 overflow-hidden">
-                <p className="text-gray-500 leading-relaxed text-sm line-clamp-4">
-                  {project.description}
-                </p>
-              </div>
+              <p className="text-slate-400 text-sm leading-relaxed mb-8 line-clamp-3 font-medium">
+                {project.description}
+              </p>
 
-              <div className="flex flex-wrap gap-2 mt-4 mb-4">
-                {project.tags.slice(0, 3).map(tag => ( // Limit tags to 3 to save space
-                  <span key={tag} className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium whitespace-nowrap">
+              <div className="flex flex-wrap gap-2 mb-8 mt-auto">
+                {project.tags.map(tag => (
+                  <span key={tag} className="px-3 py-1 bg-slate-800/40 text-blue-400 rounded-lg text-[10px] font-black uppercase tracking-widest border border-white/5 group-hover:border-blue-500/20 transition-all">
                     {tag}
                   </span>
                 ))}
               </div>
               
-              <div className="pt-2 mt-auto border-t border-gray-50 flex items-center gap-4">
+              <div className="pt-6 border-t border-white/5 flex items-center justify-between">
                  <a 
                    href={project.link} 
                    target="_blank" 
                    rel="noopener noreferrer"
-                   className="flex items-center gap-2 text-sm font-semibold text-gray-900 hover:text-blue-600 transition-colors"
+                   className="flex items-center gap-3 text-sm font-black text-white hover:text-blue-400 transition-all group/link tracking-wider uppercase"
                  >
-                    View Code <ArrowRight className="w-4 h-4" />
+                    Source Code 
+                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover/link:bg-blue-600 transition-all">
+                       <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                    </div>
                  </a>
-                 <div className="flex gap-2 ml-auto">
+                 <div className="flex gap-2">
                     <a 
                       href={project.link}
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500 hover:text-gray-900"
+                      className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl transition-all text-slate-400 hover:text-white border border-transparent hover:border-white/10"
                     >
                         <Github className="w-5 h-5" />
                     </a>
@@ -134,7 +139,7 @@ export default function Projects() {
                         href={project.homepage}
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500 hover:text-gray-900"
+                        className="p-3 bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white rounded-2xl transition-all border border-blue-500/20 hover:border-blue-500 shadow-lg shadow-blue-500/10"
                       >
                           <ExternalLink className="w-5 h-5" />
                       </a>
@@ -144,25 +149,24 @@ export default function Projects() {
             </div>
           </motion.div>
         ))}
-        {/* Link to full GitHub Profile */}
-         <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: projects.length * 0.1 }}
-            className="flex-shrink-0 w-48 h-[400px] flex items-center justify-center"
-          >
-            <a 
-              href={`https://github.com/${GITHUB_USERNAME}`} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex flex-col items-center gap-4 text-gray-400 hover:text-blue-600 transition-colors group"
-            >
-              <div className="w-16 h-16 rounded-full border-2 border-dashed border-current flex items-center justify-center group-hover:border-blue-600 transition-colors">
-                <ArrowRight className="w-6 h-6" />
-              </div>
-              <span className="font-medium text-center">View More on<br/>GitHub</span>
-            </a>
-          </motion.div>
+        
+        {/* Full Profile Card */}
+        <motion.a
+          href={`https://github.com/${GITHUB_USERNAME}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="group flex flex-col items-center justify-center p-12 bg-slate-900/30 rounded-[2rem] border-2 border-dashed border-slate-800 hover:border-blue-500/50 hover:bg-slate-800/20 transition-all duration-500 gap-6 backdrop-blur-sm"
+        >
+          <div className="w-20 h-20 rounded-full bg-white/5 border border-white/10 shadow-2xl flex items-center justify-center group-hover:scale-110 group-hover:bg-blue-600 group-hover:border-blue-500 transition-all duration-500">
+            <ArrowRight className="w-10 h-10 text-white" />
+          </div>
+          <div className="text-center">
+            <p className="font-black text-white text-xl uppercase tracking-widest">Explore More</p>
+            <p className="text-slate-500 text-sm font-bold mt-1">Check out all 50+ repositories on GitHub</p>
+          </div>
+        </motion.a>
       </div>
     </div>
   );

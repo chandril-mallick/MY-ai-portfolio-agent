@@ -10,24 +10,43 @@ import Contact from './components/sections/Contact';
 import FluidBackground from './components/FluidBackground';
 import CustomCursor from './components/CustomCursor';
 import { AnimatePresence, motion } from 'framer-motion';
+import { X } from 'lucide-react';
 
 // Modal Wrapper for Sections
-const SectionModal = ({ title, active, children }) => {
+const SectionModal = ({ title, active, onClose, children }) => {
   if (!active) return null;
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95, y: 20 }}
+      initial={{ opacity: 0, scale: 0.9, y: 30 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95, y: 20 }}
-      transition={{ duration: 0.3 }}
+      exit={{ opacity: 0, scale: 0.9, y: 30 }}
+      transition={{ type: "spring", damping: 25, stiffness: 300 }}
       className="fixed inset-0 z-40 flex items-center justify-center p-4 pb-24 md:p-12 md:pb-32 pointer-events-none"
     >
-      <div className="bg-white/90 backdrop-blur-xl w-full max-w-5xl h-full max-h-[85vh] rounded-3xl shadow-2xl border border-white/50 overflow-hidden flex flex-col pointer-events-auto">
-        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white/50 shrink-0">
-          <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
+      <div className="bg-slate-900/80 backdrop-blur-3xl w-full max-w-6xl h-full max-h-[85vh] rounded-[2.5rem] shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden flex flex-col pointer-events-auto relative">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50"></div>
+        
+        <div className="p-8 border-b border-white/5 flex justify-between items-center bg-white/5 shrink-0">
+          <div className="flex items-center gap-3">
+             <div className="w-2 h-8 bg-blue-600 rounded-full"></div>
+             <h2 className="text-3xl font-black text-white tracking-tight">{title}</h2>
+          </div>
+          <button 
+            onClick={onClose}
+            className="p-3 hover:bg-white/10 rounded-2xl transition-all text-slate-400 hover:text-white group"
+          >
+            <X className="w-7 h-7 group-hover:rotate-90 transition-transform duration-300" />
+          </button>
         </div>
-        <div className="flex-1 overflow-y-auto p-6 md:p-8 scroll-smooth">
-          {children}
+        
+        <div className="flex-1 overflow-y-auto p-8 md:p-12 scroll-smooth no-scrollbar">
+           <motion.div
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ delay: 0.2 }}
+           >
+             {children}
+           </motion.div>
         </div>
       </div>
     </motion.div>
@@ -38,7 +57,7 @@ function App() {
   const [activeSection, setActiveSection] = useState('home');
 
   return (
-    <div className="min-h-screen bg-transparent text-gray-900 font-sans selection:bg-blue-100 selection:text-blue-900 overflow-hidden relative cursor-none">
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-blue-500/30 overflow-hidden relative cursor-none">
       <CustomCursor />
       <FluidBackground />
       <Header />
@@ -63,23 +82,23 @@ function App() {
         </AnimatePresence>
 
         <AnimatePresence>
-          <SectionModal key="about" title="About Me" active={activeSection === 'about'}>
+          <SectionModal key="about" title="About Me" active={activeSection === 'about'} onClose={() => setActiveSection('home')}>
             <About />
           </SectionModal>
           
-          <SectionModal key="projects" title="Featured Projects" active={activeSection === 'projects'}>
+          <SectionModal key="projects" title="Featured Projects" active={activeSection === 'projects'} onClose={() => setActiveSection('home')}>
             <Projects />
           </SectionModal>
           
-          <SectionModal key="skills" title="Technical Skills" active={activeSection === 'skills'}>
+          <SectionModal key="skills" title="Technical Skills" active={activeSection === 'skills'} onClose={() => setActiveSection('home')}>
             <Skills />
           </SectionModal>
           
-          <SectionModal key="fun" title="Fun & Interests" active={activeSection === 'fun'}>
+          <SectionModal key="fun" title="Fun & Interests" active={activeSection === 'fun'} onClose={() => setActiveSection('home')}>
             <Fun />
           </SectionModal>
           
-          <SectionModal key="contact" title="Get in Touch" active={activeSection === 'contact'}>
+          <SectionModal key="contact" title="Get in Touch" active={activeSection === 'contact'} onClose={() => setActiveSection('home')}>
             <Contact />
           </SectionModal>
         </AnimatePresence>

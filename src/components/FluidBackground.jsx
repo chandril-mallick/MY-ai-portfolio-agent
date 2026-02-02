@@ -60,7 +60,7 @@ const FluidBackground = () => {
         vec2 mouse = u_mouse / u_resolution.xy;
         mouse.x *= u_resolution.x / u_resolution.y;
 
-        float t = u_time * 0.2;
+        float t = u_time * 0.15;
         
         // Fluid warping effect
         vec2 q = vec2(0.);
@@ -68,23 +68,23 @@ const FluidBackground = () => {
         q.y = snoise(st + vec2(t * 0.05, t * 0.2));
 
         vec2 r = vec2(0.);
-        r.x = snoise(st + 1.0 * q + vec2(1.7, 9.2) + 0.15 * t + mouse.x * 0.5);
-        r.y = snoise(st + 1.0 * q + vec2(8.3, 2.8) + 0.126 * t + mouse.y * 0.5);
+        r.x = snoise(st + 0.8 * q + vec2(1.7, 9.2) + 0.15 * t + mouse.x * 0.3);
+        r.y = snoise(st + 0.8 * q + vec2(8.3, 2.8) + 0.126 * t + mouse.y * 0.3);
 
         float f = snoise(st + r);
 
-        // Color Palette based on the image (Pink/Cyan/Green/White)
-        vec3 color1 = vec3(0.95, 0.98, 1.0); // White-ish Blue
-        vec3 color2 = vec3(0.9, 0.7, 0.8);   // Soft Pink
-        vec3 color3 = vec3(0.6, 0.9, 0.8);   // Mint Green
-        vec3 color4 = vec3(0.6, 0.8, 1.0);   // Light Blue
+        // Premium Dark AI Palette (Deep Space, Indigo, Cyan, Purple)
+        vec3 color1 = vec3(0.01, 0.02, 0.05);  // Deepest Space
+        vec3 color2 = vec3(0.05, 0.02, 0.15);  // Electric Indigo
+        vec3 color3 = vec3(0.0, 0.2, 0.3);     // Neon Cyan
+        vec3 color4 = vec3(0.1, 0.0, 0.2);     // Vivid Purple
 
-        vec3 color = mix(color1, color2, clamp(f * f * 4.0, 0.0, 1.0));
-        color = mix(color, color3, clamp(length(q), 0.0, 1.0));
-        color = mix(color, color4, clamp(length(r.x), 0.0, 1.0));
+        vec3 color = mix(color1, color2, clamp(f * f * 3.0, 0.0, 1.0));
+        color = mix(color, color3, clamp(length(q) * 1.5, 0.0, 1.0));
+        color = mix(color, color4, clamp(length(r.x) * 1.2, 0.0, 1.0));
 
-        // Add extra brightness/white
-        color += 0.1;
+        // High contrast highlights
+        color += 0.05 * smoothstep(0.4, 0.8, f);
 
         gl_FragColor = vec4(color, 1.0);
       }
@@ -174,7 +174,7 @@ const FluidBackground = () => {
   return (
     <canvas 
       ref={canvasRef} 
-      className="fixed inset-0 -z-10 w-full h-full opacity-60 pointer-events-none"
+      className="fixed inset-0 -z-10 w-full h-full opacity-100 pointer-events-none"
     />
   );
 };
