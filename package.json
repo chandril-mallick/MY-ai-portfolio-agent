@@ -12,6 +12,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "baseline-browser-mapping": "^2.10.33",
+    "caniuse-lite": "^1.0.30001793",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.562.0",
