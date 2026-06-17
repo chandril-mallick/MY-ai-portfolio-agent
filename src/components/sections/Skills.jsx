@@ -62,13 +62,13 @@ const SKILL_CATEGORIES = [
 
 export default function Skills() {
   return (
-    <div className="max-w-5xl mx-auto space-y-16 pb-12">
+    <div className="max-w-5xl mx-auto space-y-10 sm:space-y-16 pb-6 sm:pb-12">
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center max-w-2xl mx-auto"
       >
-        <p className="text-slate-400 text-lg leading-relaxed">
+        <p className="text-slate-400 text-base sm:text-lg leading-relaxed px-1">
           Mastering the full AI lifecycle: from <span className="text-blue-400 font-bold">deep model research</span> to <span className="text-purple-400 font-bold">scalable cloud deployment</span>.
         </p>
       </motion.div>
@@ -79,12 +79,12 @@ export default function Skills() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: categoryIndex * 0.1 }}
-            className="text-xl font-black text-white mb-8 flex items-center gap-3"
+            className="text-lg sm:text-xl font-black text-white mb-5 sm:mb-8 flex items-center gap-3"
           >
             <span className="w-8 h-1 bg-blue-600 rounded-full shadow-[0_0_10px_rgba(37,99,235,0.5)]"></span>
             {category.title}
           </motion.h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
             {category.skills.map((skill, index) => {
               const Icon = skill.icon;
               return (
@@ -94,14 +94,14 @@ export default function Skills() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: (categoryIndex * 0.1) + (index * 0.02) }}
                   whileHover={{ y: -5, scale: 1.02 }}
-                  className="group relative p-5 bg-slate-800/40 rounded-2xl border border-white/5 hover:bg-slate-800/60 hover:border-blue-500/30 transition-all cursor-default overflow-hidden backdrop-blur-sm shadow-xl"
+                  className="group relative p-3 sm:p-5 bg-slate-800/40 rounded-xl sm:rounded-2xl border border-white/5 hover:bg-slate-800/60 hover:border-blue-500/30 transition-all cursor-default overflow-hidden backdrop-blur-sm shadow-xl"
                 >
                   <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${skill.color} opacity-0 group-hover:opacity-100 transition-opacity`}></div>
-                  <div className="flex flex-col items-center gap-4 text-center">
-                    <div className="p-3 bg-white/5 rounded-xl group-hover:bg-white/10 transition-colors">
-                      <Icon className="w-8 h-8 text-slate-300 group-hover:text-white transition-all duration-300" />
+                  <div className="flex flex-col items-center gap-2 sm:gap-4 text-center">
+                    <div className="p-2 sm:p-3 bg-white/5 rounded-lg sm:rounded-xl group-hover:bg-white/10 transition-colors">
+                      <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-slate-300 group-hover:text-white transition-all duration-300" />
                     </div>
-                    <span className="font-bold text-slate-300 text-sm group-hover:text-white transition-colors">
+                    <span className="font-bold text-slate-300 text-xs sm:text-sm group-hover:text-white transition-colors leading-tight">
                       {skill.name}
                     </span>
                   </div>

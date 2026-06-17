@@ -62,18 +62,18 @@ export default function Projects() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className="w-full mx-auto px-0 sm:px-2 py-2 sm:py-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
         {projects.map((project, index) => (
           <motion.div
             key={project.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
-            className="group bg-slate-900/40 rounded-[2rem] border border-white/5 overflow-hidden hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-blue-500/30 transition-all duration-500 flex flex-col h-full backdrop-blur-md"
+            className="group bg-slate-900/40 rounded-2xl sm:rounded-[2rem] border border-white/5 overflow-hidden hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-blue-500/30 transition-all duration-500 flex flex-col h-full backdrop-blur-md"
           >
             {/* Project Image - Using GitHub Open Graph */}
-            <div className="h-48 shrink-0 relative overflow-hidden">
+            <div className="h-40 sm:h-48 shrink-0 relative overflow-hidden">
                <img 
                  src={`https://opengraph.githubassets.com/1/${GITHUB_USERNAME}/${project.originalName}`}
                  alt={project.title}
@@ -96,8 +96,8 @@ export default function Projects() {
             </div>
 
             {/* Content Body */}
-            <div className="p-8 flex flex-col flex-1">
-              <h3 className="text-2xl font-black text-white group-hover:text-blue-400 transition-colors capitalize line-clamp-1 mb-3">
+            <div className="p-5 sm:p-8 flex flex-col flex-1">
+              <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-blue-400 transition-colors capitalize line-clamp-2 sm:line-clamp-1 mb-2 sm:mb-3">
                 {project.title}
               </h3>
               
@@ -113,15 +113,15 @@ export default function Projects() {
                 ))}
               </div>
               
-              <div className="pt-6 border-t border-white/5 flex items-center justify-between">
+              <div className="pt-4 sm:pt-6 border-t border-white/5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                  <a 
                    href={project.link} 
                    target="_blank" 
                    rel="noopener noreferrer"
-                   className="flex items-center gap-3 text-sm font-black text-white hover:text-blue-400 transition-all group/link tracking-wider uppercase"
+                   className="touch-target flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-black text-white hover:text-blue-400 transition-all group/link tracking-wider uppercase"
                  >
                     Source Code 
-                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover/link:bg-blue-600 transition-all">
+                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover/link:bg-blue-600 transition-all shrink-0">
                        <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
                     </div>
                  </a>
@@ -157,7 +157,7 @@ export default function Projects() {
           rel="noopener noreferrer"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="group flex flex-col items-center justify-center p-12 bg-slate-900/30 rounded-[2rem] border-2 border-dashed border-slate-800 hover:border-blue-500/50 hover:bg-slate-800/20 transition-all duration-500 gap-6 backdrop-blur-sm"
+          className="group flex flex-col items-center justify-center p-8 sm:p-12 bg-slate-900/30 rounded-2xl sm:rounded-[2rem] border-2 border-dashed border-slate-800 hover:border-blue-500/50 hover:bg-slate-800/20 transition-all duration-500 gap-4 sm:gap-6 backdrop-blur-sm"
         >
           <div className="w-20 h-20 rounded-full bg-white/5 border border-white/10 shadow-2xl flex items-center justify-center group-hover:scale-110 group-hover:bg-blue-600 group-hover:border-blue-500 transition-all duration-500">
             <ArrowRight className="w-10 h-10 text-white" />

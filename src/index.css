@@ -3,8 +3,15 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+  }
+
   body {
-    @apply bg-slate-950 text-slate-100 antialiased overflow-hidden selection:bg-blue-500/30;
+    @apply bg-slate-950 text-slate-100 antialiased selection:bg-blue-500/30;
+    overflow-x: hidden;
+    min-height: 100dvh;
   }
 }
 
@@ -12,18 +19,30 @@
   .modern-glass {
     @apply bg-slate-900/40 backdrop-blur-3xl border border-white/10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)];
   }
-  
+
   .glow-border {
     @apply relative border border-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.1)] hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all duration-300;
   }
-  
+
   .ai-glow {
     @apply relative after:absolute after:inset-0 after:rounded-full after:bg-blue-600/20 after:blur-[100px] after:-z-10;
   }
-  
+
   .typing-cursor::after {
     content: '|';
     @apply animate-pulse ml-1 text-blue-400 font-bold;
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
   }
 }
 
@@ -36,11 +55,16 @@
   animation: float 6s ease-in-out infinite;
 }
 
-/* Custom Scrollbar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float {
+    animation: none;
+  }
 }

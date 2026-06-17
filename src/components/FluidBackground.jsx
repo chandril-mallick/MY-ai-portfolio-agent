@@ -137,17 +137,26 @@ const FluidBackground = () => {
 
     const handleMouseMove = (e) => {
       mouseX = e.clientX;
-      mouseY = window.innerHeight - e.clientY; // Invert Y for GLSL
+      mouseY = window.innerHeight - e.clientY;
     };
-    window.addEventListener('mousemove', handleMouseMove);
 
-    const startTime = Date.now();
+    const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+    const isNarrow = window.innerWidth < 768;
+    if (!isCoarse && !isNarrow) {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
 
-    const render = () => {
-      // Resize canvas
-      if (canvas.width !== window.innerWidth || canvas.height !== window.innerHeight) {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const bindAndDraw = (time) => {
+      const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1 : 1.5);
+      const w = Math.floor(window.innerWidth * dpr);
+      const h = Math.floor(window.innerHeight * dpr);
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+        canvas.style.width = `${window.innerWidth}px`;
+        canvas.style.height = `${window.innerHeight}px`;
         gl.viewport(0, 0, canvas.width, canvas.height);
       }
 
@@ -155,12 +164,23 @@ const FluidBackground = () => {
       gl.enableVertexAttribArray(positionAttributeLocation);
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
       gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
-
       gl.uniform2f(resolutionUniformLocation, canvas.width, canvas.height);
-      gl.uniform1f(timeUniformLocation, (Date.now() - startTime) * 0.001);
+      gl.uniform1f(timeUniformLocation, time);
       gl.uniform2f(mouseUniformLocation, mouseX, mouseY);
-
       gl.drawArrays(gl.TRIANGLES, 0, 6);
+    };
+
+    if (prefersReducedMotion) {
+      bindAndDraw(0);
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+      };
+    }
+
+    const startTime = Date.now();
+
+    const render = () => {
+      bindAndDraw((Date.now() - startTime) * 0.001);
       requestAnimationFrame(render);
     };
 
