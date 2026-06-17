@@ -44,6 +44,22 @@
   .touch-target {
     @apply min-h-[44px] min-w-[44px];
   }
+
+  .shadow-glow {
+    box-shadow: 0 0 24px rgba(37, 99, 235, 0.35), 0 0 48px rgba(34, 211, 238, 0.12);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
 }
 
 @keyframes float {
