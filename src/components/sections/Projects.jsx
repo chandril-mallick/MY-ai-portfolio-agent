@@ -1,18 +1,114 @@
 import React, { useEffect, useState } from 'react';
-import { Github, ExternalLink, ArrowRight, Loader2, Star, GitFork } from 'lucide-react';
+import { Github, ExternalLink, ArrowRight, Loader2, Star, GitFork, ChevronDown, ChevronUp, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { FEATURED_PROJECTS, GITHUB_USERNAME } from '../../data/profile';
 
-const COLORS = [
-  'bg-blue-500',
-  'bg-purple-500',
-  'bg-emerald-500',
-  'bg-orange-500',
-  'bg-pink-500',
-  'bg-cyan-500',
-];
-
 const FEATURED_REPO_NAMES = new Set(FEATURED_PROJECTS.map((p) => p.repoName));
+
+function FeaturedCard({ project, index }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="group bg-slate-900/60 rounded-2xl sm:rounded-[1.75rem] border border-yellow-500/20 hover:border-yellow-500/40 transition-all duration-300 overflow-hidden"
+    >
+      {/* Yellow top accent bar */}
+      <div className="h-0.5 w-full bg-yellow-500 opacity-60" />
+
+      <div className="p-4 sm:p-6 md:p-8">
+        {/* Header */}
+        <div className="flex flex-wrap items-start justify-between gap-3 mb-4 sm:mb-5">
+          <div className="min-w-0 flex-1">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white group-hover:text-yellow-400 transition-colors tracking-tight leading-tight">
+              {project.title}
+            </h3>
+            <p className="text-yellow-400/90 text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-1">
+              {project.subtitle}
+            </p>
+          </div>
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="touch-target flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2 rounded-xl bg-white/5 hover:bg-yellow-500 hover:text-slate-950 text-slate-300 text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all shrink-0"
+          >
+            <Github className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+            <span className="hidden xs:inline">GitHub</span>
+          </a>
+        </div>
+
+        {/* Metrics */}
+        {project.metrics && (
+          <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-5">
+            {project.metrics.map((m) => (
+              <div key={m.label} className="flex items-center gap-2 bg-slate-800/50 border border-white/5 rounded-lg sm:rounded-xl px-2.5 sm:px-3 py-1.5 sm:py-2">
+                <span className="text-base sm:text-lg font-black text-white leading-none">{m.value}</span>
+                <span className="text-[8px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-tight">{m.label}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5">
+          {project.tags.map((tag) => (
+            <span key={tag} className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-slate-800/60 text-yellow-400 rounded-md sm:rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-white/5">
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Problem / Solution */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-5">
+          <div className="bg-slate-800/30 rounded-xl p-3 sm:p-4 border border-white/5">
+            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-yellow-400/80 mb-1">Problem</p>
+            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">{project.problem}</p>
+          </div>
+          <div className="bg-slate-800/30 rounded-xl p-3 sm:p-4 border border-white/5">
+            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-yellow-400/80 mb-1">Solution</p>
+            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">{project.solution}</p>
+          </div>
+        </div>
+
+        {/* Architecture */}
+        {project.architecture && (
+          <div className="flex items-start gap-2 bg-yellow-950/20 border border-yellow-500/15 rounded-xl p-3 sm:p-4 mb-4 sm:mb-5">
+            <Cpu className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-400 shrink-0 mt-0.5" aria-hidden />
+            <div className="min-w-0">
+              <p className="text-[9px] font-black uppercase tracking-widest text-yellow-400/70 mb-1">Architecture</p>
+              <p className="text-slate-300 text-[10px] sm:text-xs font-mono leading-relaxed break-words">{project.architecture}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Expandable highlights */}
+        <button
+          type="button"
+          onClick={() => setExpanded((p) => !p)}
+          className="flex items-center gap-1.5 text-[10px] font-black text-slate-500 hover:text-slate-300 uppercase tracking-widest transition-colors mb-2"
+          aria-expanded={expanded}
+        >
+          {expanded ? 'Hide Details' : 'Show All Highlights'}
+          {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+        </button>
+
+        {expanded && (
+          <motion.ul initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-2">
+            {project.highlights.map((item) => (
+              <li key={item} className="text-slate-400 text-xs sm:text-sm leading-relaxed flex gap-2">
+                <span className="text-yellow-500 shrink-0 mt-0.5">▸</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </div>
+    </motion.article>
+  );
+}
 
 export default function Projects() {
   const [repos, setRepos] = useState([]);
@@ -27,10 +123,9 @@ export default function Projects() {
         );
         if (!response.ok) throw new Error('Failed to fetch projects');
         const data = await response.json();
-
         const formatted = data
           .filter((repo) => !repo.fork && !FEATURED_REPO_NAMES.has(repo.name))
-          .map((repo, index) => ({
+          .map((repo) => ({
             id: repo.id,
             title: repo.name.replace(/-/g, ' ').replace(/_/g, ' '),
             originalName: repo.name,
@@ -40,9 +135,7 @@ export default function Projects() {
             homepage: repo.homepage,
             stars: repo.stargazers_count,
             forks: repo.forks_count,
-            color: COLORS[index % COLORS.length],
           }));
-
         setRepos(formatted);
       } catch (err) {
         setError(err.message);
@@ -50,149 +143,86 @@ export default function Projects() {
         setLoading(false);
       }
     };
-
     fetchRepos();
   }, []);
 
   return (
-    <div className="w-full mx-auto px-0 sm:px-2 py-2 sm:py-4 space-y-8 sm:space-y-10">
+    <div className="w-full space-y-10 sm:space-y-14">
+      {/* Featured */}
       <div>
-        <h3 className="text-sm font-black uppercase tracking-widest text-blue-400 mb-4">
-          Flagship Projects
-        </h3>
-        <div className="grid grid-cols-1 gap-4 sm:gap-6">
+        <p className="section-label mb-3 sm:mb-4">Flagship Projects</p>
+        <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6">
           {FEATURED_PROJECTS.map((project, index) => (
-            <motion.article
-              key={project.id}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.08 }}
-              className="group bg-slate-900/50 rounded-2xl sm:rounded-[2rem] border border-blue-500/20 p-5 sm:p-8 hover:border-blue-500/40 transition-all"
-            >
-              <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
-                <div>
-                  <h4 className="text-xl sm:text-2xl font-black text-white group-hover:text-blue-400 transition-colors">
-                    {project.title}
-                  </h4>
-                  <p className="text-blue-400/90 text-xs sm:text-sm font-bold uppercase tracking-widest mt-1">
-                    {project.subtitle}
-                  </p>
-                </div>
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="touch-target flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 hover:bg-blue-600 text-slate-300 hover:text-white text-xs font-black uppercase tracking-wider transition-all"
-                >
-                  <Github className="w-4 h-4" />
-                  GitHub
-                </a>
-              </div>
-
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2.5 py-1 bg-slate-800/60 text-blue-400 rounded-lg text-[10px] font-black uppercase tracking-widest border border-white/5"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <ul className="space-y-2">
-                {project.highlights.map((item) => (
-                  <li key={item} className="text-slate-400 text-sm leading-relaxed flex gap-2">
-                    <span className="text-blue-500 shrink-0">▸</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.article>
+            <FeaturedCard key={project.id} project={project} index={index} />
           ))}
         </div>
       </div>
 
+      {/* GitHub repos */}
       <div>
-        <h3 className="text-sm font-black uppercase tracking-widest text-slate-500 mb-4">
-          More on GitHub
-        </h3>
+        <p className="section-label mb-3 sm:mb-4">More on GitHub</p>
 
         {loading && (
-          <div className="h-32 flex items-center justify-center">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+          <div className="h-28 flex items-center justify-center">
+            <Loader2 className="w-7 h-7 animate-spin text-yellow-500" />
           </div>
         )}
-
         {error && (
-          <div className="h-32 flex flex-col items-center justify-center text-red-400 gap-3 text-sm">
-            <p className="font-medium">Could not load additional repositories.</p>
-            <a
-              href={`https://github.com/${GITHUB_USERNAME}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-400 font-bold underline"
-            >
-              View GitHub profile
+          <div className="h-28 flex flex-col items-center justify-center text-red-400 gap-3 text-sm">
+            <p className="font-medium">Could not load repositories.</p>
+            <a href={`https://github.com/${GITHUB_USERNAME}`} target="_blank" rel="noopener noreferrer" className="text-yellow-400 font-bold underline">
+              View GitHub
             </a>
           </div>
         )}
-
         {!loading && !error && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-5">
             {repos.map((project, index) => (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.04 }}
-                className="group bg-slate-900/40 rounded-2xl border border-white/5 overflow-hidden hover:border-blue-500/30 transition-all flex flex-col"
+                className="group bg-slate-900/40 rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden hover:border-yellow-500/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col"
               >
-                <div className="h-36 sm:h-40 relative overflow-hidden shrink-0">
+                <div className="h-28 sm:h-32 md:h-36 relative overflow-hidden shrink-0">
                   <img
                     src={`https://opengraph.githubassets.com/1/${GITHUB_USERNAME}/${project.originalName}`}
                     alt={project.title}
                     loading="lazy"
                     decoding="async"
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                     onError={(e) => {
                       e.target.style.display = 'none';
-                      e.target.parentElement.classList.add(project.color, 'opacity-40');
+                      e.target.parentElement.classList.add('bg-yellow-500', 'opacity-40');
                     }}
                   />
-                  <div className="absolute bottom-3 left-3 flex gap-2 text-white text-[10px] font-bold">
-                    <span className="flex items-center gap-1 bg-black/50 px-2 py-1 rounded-full">
-                      <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /> {project.stars}
+                  <div className="absolute bottom-2 left-2 flex gap-1.5 text-white text-[9px] sm:text-[10px] font-bold">
+                    <span className="flex items-center gap-1 bg-black/60 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
+                      <Star className="w-2.5 h-2.5 fill-yellow-400 text-yellow-400" /> {project.stars}
                     </span>
-                    <span className="flex items-center gap-1 bg-black/50 px-2 py-1 rounded-full">
-                      <GitFork className="w-3 h-3" /> {project.forks}
+                    <span className="flex items-center gap-1 bg-black/60 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
+                      <GitFork className="w-2.5 h-2.5" /> {project.forks}
                     </span>
                   </div>
+                  {project.tags[0] !== 'Software' && (
+                    <span className="absolute top-2 right-2 px-1.5 sm:px-2 py-0.5 bg-black/60 backdrop-blur-sm text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-slate-300 rounded-full">
+                      {project.tags[0]}
+                    </span>
+                  )}
                 </div>
-
-                <div className="p-4 sm:p-6 flex flex-col flex-1">
-                  <h4 className="text-lg font-black text-white capitalize line-clamp-1 mb-2">
-                    {project.title}
-                  </h4>
-                  <p className="text-slate-400 text-sm line-clamp-2 mb-4 flex-1">{project.description}</p>
-                  <div className="flex items-center justify-between pt-3 border-t border-white/5">
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs font-black text-white hover:text-blue-400 uppercase tracking-wider flex items-center gap-2"
-                    >
-                      Source <ArrowRight className="w-3.5 h-3.5" />
+                <div className="p-3 sm:p-4 md:p-5 flex flex-col flex-1">
+                  <h4 className="text-sm sm:text-base font-black text-white capitalize line-clamp-1 mb-1">{project.title}</h4>
+                  <p className="text-slate-400 text-xs sm:text-sm line-clamp-2 mb-3 flex-1">{project.description}</p>
+                  <div className="flex items-center justify-between pt-2.5 border-t border-white/5">
+                    <a href={project.link} target="_blank" rel="noopener noreferrer"
+                      className="text-[10px] sm:text-xs font-black text-white hover:text-yellow-400 uppercase tracking-wider flex items-center gap-1.5 transition-colors">
+                      Source <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     </a>
                     {project.homepage && (
-                      <a
-                        href={project.homepage}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-xl bg-blue-600/10 text-blue-400 hover:bg-blue-600 hover:text-white transition-all"
-                        aria-label="Live demo"
-                      >
-                        <ExternalLink className="w-4 h-4" />
+                      <a href={project.homepage} target="_blank" rel="noopener noreferrer"
+                        className="p-1.5 rounded-lg bg-yellow-600/10 text-yellow-400 hover:bg-yellow-500 hover:text-slate-950 transition-all" aria-label="Live demo">
+                        <ExternalLink className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                       </a>
                     )}
                   </div>
@@ -206,10 +236,12 @@ export default function Projects() {
               rel="noopener noreferrer"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex flex-col items-center justify-center p-8 bg-slate-900/30 rounded-2xl border-2 border-dashed border-slate-700 hover:border-blue-500/50 transition-all gap-4"
+              className="flex flex-col items-center justify-center p-6 sm:p-8 bg-slate-900/30 rounded-xl sm:rounded-2xl border-2 border-dashed border-slate-700 hover:border-yellow-500/50 hover:bg-slate-900/50 transition-all gap-2.5 group"
             >
-              <ArrowRight className="w-8 h-8 text-white" />
-              <p className="font-black text-white text-sm uppercase tracking-widest">All Repositories</p>
+              <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-slate-500 group-hover:text-white transition-colors" />
+              <p className="font-black text-slate-500 group-hover:text-white text-[10px] sm:text-xs uppercase tracking-widest transition-colors text-center">
+                All Repositories
+              </p>
             </motion.a>
           </div>
         )}

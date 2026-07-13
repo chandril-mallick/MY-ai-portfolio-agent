@@ -3,6 +3,8 @@ import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/sections/About';
+import Journey from './components/sections/Journey';
+import Startups from './components/sections/Startups';
 import Projects from './components/sections/Projects';
 import Skills from './components/sections/Skills';
 import Fun from './components/sections/Fun';
@@ -14,6 +16,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 const SECTION_CONFIG = {
   about: { title: 'About Me', Content: About },
+  journey: { title: 'My Story', Content: Journey },
+  startups: { title: 'Building the Future', Content: Startups },
   projects: { title: 'Featured Projects', Content: Projects },
   skills: { title: 'Technical Skills', Content: Skills },
   fun: { title: 'Achievements', Content: Fun },
@@ -39,7 +43,7 @@ function App() {
   const closeModal = () => setActiveSection('home');
 
   return (
-    <div className="min-h-[100dvh] bg-slate-950 text-slate-100 font-sans selection:bg-blue-500/30 overflow-x-hidden relative">
+    <div className="min-h-[100dvh] bg-slate-950 text-slate-100 font-sans selection:bg-yellow-500/30 overflow-x-hidden relative">
       <CustomCursor />
       <FluidBackground />
       <Header onAbout={() => setActiveSection('about')} />
