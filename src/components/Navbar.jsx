@@ -8,7 +8,7 @@ const NAV_ITEMS = [
   { id: 'startups', label: 'Ventures', icon: Rocket },
   { id: 'projects', label: 'Projects', icon: Folder },
   { id: 'skills',   label: 'Skills',   icon: Zap },
-  { id: 'fun',      label: 'Awards',   icon: Trophy },
+
   { id: 'contact',  label: 'Contact',  icon: Send },
 ];
 
@@ -65,11 +65,11 @@ export default function Navbar({ activeSection, onNavigate, hidden = false }) {
             >
               {/* Active bg */}
               {isActive && (
-                <div className="absolute inset-0 rounded-xl md:rounded-2xl -z-10 bg-yellow-500/95 md:bg-yellow-500 shadow-[0_0_16px_rgba(234,179,8,0.4)]" />
+                <div className="absolute inset-0 rounded-xl md:rounded-2xl -z-10 bg-white/95 md:bg-white shadow-[0_0_16px_rgba(255,255,255,0.25)]" />
               )}
               {/* Active indicator dot — mobile only */}
               {isActive && (
-                <span className="absolute -top-px left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-yellow-950 md:hidden" aria-hidden />
+                <span className="absolute -top-px left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-slate-950 md:hidden" aria-hidden />
               )}
 
               <Icon

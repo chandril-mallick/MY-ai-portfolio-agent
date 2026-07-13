@@ -10,6 +10,13 @@ export function getAIResponse(text) {
       target: 'projects',
     };
   }
+  if (q.includes('pathshala')) {
+    return {
+      content:
+        'PathShala AI is a voice-first AI tutor specifically designed for competitive exams like JEE, NEET, WBJEE & UPSC in Bengali. It supports voice learning and explanations in Bengali. Opening Ventures…',
+      target: 'startups',
+    };
+  }
   if (q.includes('smartsant') || (q.includes('health') && !q.includes('about'))) {
     return {
       content:

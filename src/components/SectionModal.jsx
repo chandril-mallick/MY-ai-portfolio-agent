@@ -1,8 +1,17 @@
 import React, { useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
+import { useRef } from 'react';
 import { X } from 'lucide-react';
 
 export default function SectionModal({ title, active, onClose, children }) {
+  const scrollRef = useRef(null);
+  const { scrollYProgress } = useScroll({ container: scrollRef });
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   useEffect(() => {
     if (!active) return undefined;
     const onKey = (e) => {
@@ -60,13 +69,16 @@ export default function SectionModal({ title, active, onClose, children }) {
               <div className="w-10 h-1 rounded-full bg-white/20" aria-hidden />
             </div>
 
-            {/* ── Top color accent bar ── */}
-            <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-yellow-500 to-transparent" />
+            {/* ── Top color accent bar (Scroll Progress) ── */}
+            <motion.div 
+              className="absolute top-0 left-0 w-full h-1 bg-yellow-500 origin-left z-50"
+              style={{ scaleX }} 
+            />
 
             {/* ── Modal header ── */}
             <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 border-b border-white/5 bg-white/[0.03] shrink-0">
               <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                <div className="w-1.5 sm:w-2 h-5 sm:h-6 md:h-8 bg-yellow-500 rounded-full shrink-0" />
+                <div className="w-1.5 sm:w-2 h-5 sm:h-6 md:h-8 bg-slate-400 rounded-full shrink-0" />
                 <h2
                   id="section-modal-title"
                   className="text-base sm:text-xl md:text-2xl lg:text-3xl font-black text-white tracking-tight truncate"
@@ -86,6 +98,7 @@ export default function SectionModal({ title, active, onClose, children }) {
 
             {/* ── Scrollable content ── */}
             <div
+              ref={scrollRef}
               className={[
                 'flex-1 overflow-y-auto overflow-x-hidden',
                 'p-4 sm:p-6 md:p-8 lg:p-10',

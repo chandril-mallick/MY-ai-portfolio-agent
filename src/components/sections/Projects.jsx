@@ -1,9 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import { Github, ExternalLink, ArrowRight, Loader2, Star, GitFork, ChevronDown, ChevronUp, Cpu } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { FEATURED_PROJECTS, GITHUB_USERNAME } from '../../data/profile';
 
 const FEATURED_REPO_NAMES = new Set(FEATURED_PROJECTS.map((p) => p.repoName));
+
+function TiltCard({ children, className }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x);
+  const mouseYSpring = useSpring(y);
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7.5deg", "-7.5deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7.5deg", "7.5deg"]);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateY, rotateX, transformStyle: "preserve-3d" }}
+      className={className}
+    >
+      <div style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d" }} className="h-full">
+        {children}
+      </div>
+    </motion.div>
+  );
+}
 
 function FeaturedCard({ project, index }) {
   const [expanded, setExpanded] = useState(false);
@@ -13,19 +54,20 @@ function FeaturedCard({ project, index }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="group bg-slate-900/60 rounded-2xl sm:rounded-[1.75rem] border border-yellow-500/20 hover:border-yellow-500/40 transition-all duration-300 overflow-hidden"
+      className="group perspective-1000"
     >
+      <TiltCard className="h-full bg-slate-900/60 rounded-2xl sm:rounded-[1.75rem] border border-white/5 hover:border-white/20 transition-all duration-300 overflow-hidden">
       {/* Yellow top accent bar */}
-      <div className="h-0.5 w-full bg-yellow-500 opacity-60" />
+      <div className="h-0.5 w-full bg-white opacity-10" />
 
       <div className="p-4 sm:p-6 md:p-8">
         {/* Header */}
         <div className="flex flex-wrap items-start justify-between gap-3 mb-4 sm:mb-5">
           <div className="min-w-0 flex-1">
-            <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white group-hover:text-yellow-400 transition-colors tracking-tight leading-tight">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white group-hover:text-slate-200 transition-colors tracking-tight leading-tight">
               {project.title}
             </h3>
-            <p className="text-yellow-400/90 text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-1">
+            <p className="text-slate-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-1">
               {project.subtitle}
             </p>
           </div>
@@ -33,7 +75,7 @@ function FeaturedCard({ project, index }) {
             href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="touch-target flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2 rounded-xl bg-white/5 hover:bg-yellow-500 hover:text-slate-950 text-slate-300 text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all shrink-0"
+            className="touch-target flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all shrink-0"
           >
             <Github className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             <span className="hidden xs:inline">GitHub</span>
@@ -55,7 +97,7 @@ function FeaturedCard({ project, index }) {
         {/* Tags */}
         <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5">
           {project.tags.map((tag) => (
-            <span key={tag} className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-slate-800/60 text-yellow-400 rounded-md sm:rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-white/5">
+            <span key={tag} className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-slate-800/60 text-white rounded-md sm:rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-white/5">
               {tag}
             </span>
           ))}
@@ -64,21 +106,21 @@ function FeaturedCard({ project, index }) {
         {/* Problem / Solution */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-5">
           <div className="bg-slate-800/30 rounded-xl p-3 sm:p-4 border border-white/5">
-            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-yellow-400/80 mb-1">Problem</p>
+            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Problem</p>
             <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">{project.problem}</p>
           </div>
           <div className="bg-slate-800/30 rounded-xl p-3 sm:p-4 border border-white/5">
-            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-yellow-400/80 mb-1">Solution</p>
+            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Solution</p>
             <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">{project.solution}</p>
           </div>
         </div>
 
         {/* Architecture */}
         {project.architecture && (
-          <div className="flex items-start gap-2 bg-yellow-950/20 border border-yellow-500/15 rounded-xl p-3 sm:p-4 mb-4 sm:mb-5">
-            <Cpu className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-400 shrink-0 mt-0.5" aria-hidden />
+          <div className="flex items-start gap-2 bg-slate-900/50 border border-white/5 rounded-xl p-3 sm:p-4 mb-4 sm:mb-5">
+            <Cpu className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500 shrink-0 mt-0.5" aria-hidden />
             <div className="min-w-0">
-              <p className="text-[9px] font-black uppercase tracking-widest text-yellow-400/70 mb-1">Architecture</p>
+              <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">Architecture</p>
               <p className="text-slate-300 text-[10px] sm:text-xs font-mono leading-relaxed break-words">{project.architecture}</p>
             </div>
           </div>
@@ -106,6 +148,7 @@ function FeaturedCard({ project, index }) {
           </motion.ul>
         )}
       </div>
+      </TiltCard>
     </motion.article>
   );
 }

@@ -73,11 +73,11 @@ const FluidBackground = () => {
 
         float f = snoise(st + r);
 
-        // Premium Dark AI Palette (Deep Space, Indigo, Cyan, Purple)
-        vec3 color1 = vec3(0.01, 0.02, 0.05);  // Deepest Space
-        vec3 color2 = vec3(0.05, 0.02, 0.15);  // Electric Indigo
-        vec3 color3 = vec3(0.0, 0.2, 0.3);     // Neon Cyan
-        vec3 color4 = vec3(0.1, 0.0, 0.2);     // Vivid Purple
+        // Premium Dark Yellow AI Palette (Deep Space, Dark Gold, Amber, Bronze)
+        vec3 color1 = vec3(0.005, 0.005, 0.01);  // Deepest Slate Space
+        vec3 color2 = vec3(0.06, 0.045, 0.01);   // Electric Amber
+        vec3 color3 = vec3(0.10, 0.08, 0.01);    // Solid Golden Glow
+        vec3 color4 = vec3(0.04, 0.025, 0.005);  // Subtle Deep Bronze
 
         vec3 color = mix(color1, color2, clamp(f * f * 3.0, 0.0, 1.0));
         color = mix(color, color3, clamp(length(q) * 1.5, 0.0, 1.0));

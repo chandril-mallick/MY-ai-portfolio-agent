@@ -1,24 +1,65 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Rocket, ChevronDown, ChevronUp, Globe, Linkedin } from 'lucide-react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { STARTUPS } from '../../data/profile';
 
+function TiltCard({ children, className }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x);
+  const mouseYSpring = useSpring(y);
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7.5deg", "-7.5deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7.5deg", "7.5deg"]);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateY, rotateX, transformStyle: "preserve-3d" }}
+      className={className}
+    >
+      <div style={{ transform: "translateZ(30px)", transformStyle: "preserve-3d" }} className="h-full">
+        {children}
+      </div>
+    </motion.div>
+  );
+}
+
 const STATUS_STYLES = {
-  Building: 'bg-yellow-500/15 text-yellow-400 border-yellow-500/30',
-  Stealth:  'bg-yellow-600/15 text-yellow-500 border-yellow-500/20',
-  Prototype:'bg-yellow-500/10 text-slate-400 border-white/10',
-  'Beta Cohort': 'bg-yellow-500/15 text-yellow-400 border-yellow-500/30',
+  Building: 'bg-slate-800/50 text-slate-300 border-white/10',
+  Stealth:  'bg-slate-800/50 text-slate-400 border-white/10',
+  Prototype:'bg-slate-800/50 text-slate-400 border-white/10',
+  'Beta Cohort': 'bg-slate-800/50 text-slate-300 border-white/10',
 };
 const PULSE_COLORS = {
-  Building: 'bg-yellow-500',
-  Stealth:  'bg-yellow-600',
+  Building: 'bg-slate-300',
+  Stealth:  'bg-slate-400',
   Prototype:'bg-slate-400',
-  'Beta Cohort': 'bg-yellow-400',
+  'Beta Cohort': 'bg-slate-300',
 };
 const CARD_GRADIENTS = [
-  'from-yellow-600/10 via-transparent to-transparent border-yellow-500/20 hover:border-yellow-500/40',
+  'from-slate-800/20 via-transparent to-transparent border-white/5 hover:border-white/20',
 ];
-const BLOB_COLOR = '#eab308'; // solid yellow-500
+const BLOB_COLOR = '#475569'; // slate-600
 
 function StartupCard({ startup, index }) {
   const [expanded, setExpanded] = useState(false);
@@ -29,8 +70,9 @@ function StartupCard({ startup, index }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.45 }}
-      className={`relative rounded-xl sm:rounded-2xl md:rounded-[1.75rem] bg-gradient-to-br ${gradient} border p-4 sm:p-6 md:p-8 transition-all duration-300 overflow-hidden group`}
+      className="group perspective-1000"
     >
+      <TiltCard className={`relative rounded-xl sm:rounded-2xl md:rounded-[1.75rem] bg-gradient-to-br ${gradient} border p-4 sm:p-6 md:p-8 transition-all duration-300 overflow-hidden`}>
       {/* Decorative blob */}
       <div
         className="absolute -top-8 -right-8 w-24 h-24 sm:w-32 sm:h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none"
@@ -46,8 +88,8 @@ function StartupCard({ startup, index }) {
               <img src={startup.logoUrl} alt={startup.name} className="w-full h-full object-contain" />
             </div>
           ) : (
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-yellow-500/20 bg-yellow-500/10 flex items-center justify-center shrink-0">
-              <Rocket className="w-5 h-5 text-yellow-500" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center shrink-0">
+              <span className="text-white font-black text-lg">{startup.name.charAt(0)}</span>
             </div>
           )}
           <div className="min-w-0">
@@ -82,6 +124,16 @@ function StartupCard({ startup, index }) {
         </motion.div>
       )}
 
+      {/* Architecture */}
+      {startup.architecture && expanded && (
+        <div className="flex items-start gap-2 bg-slate-900/50 border border-white/5 rounded-xl p-3 sm:p-4 mb-4 sm:mb-5">
+          <div className="min-w-0">
+            <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">Architecture</p>
+            <p className="text-slate-300 text-[10px] sm:text-xs font-mono leading-relaxed break-words">{startup.architecture}</p>
+          </div>
+        </div>
+      )}
+
       {/* Footer */}
       <div className="flex items-center justify-between flex-wrap gap-3 pt-3 border-t border-white/5 mt-1">
         <div className="flex items-center gap-2">
@@ -90,9 +142,8 @@ function StartupCard({ startup, index }) {
               href={startup.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black rounded-lg text-[9px] sm:text-[10px] uppercase tracking-wider transition-all shadow-sm active:scale-95"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-lg text-[9px] sm:text-[10px] uppercase tracking-wider transition-all shadow-sm active:scale-95"
             >
-              <Globe className="w-3.5 h-3.5" />
               Website
             </a>
           )}
@@ -103,7 +154,6 @@ function StartupCard({ startup, index }) {
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-lg text-[9px] sm:text-[10px] uppercase tracking-wider transition-all active:scale-95"
             >
-              <Linkedin className="w-3.5 h-3.5" />
               LinkedIn
             </a>
           )}
@@ -127,6 +177,7 @@ function StartupCard({ startup, index }) {
           </button>
         </div>
       </div>
+      </TiltCard>
     </motion.article>
   );
 }
@@ -152,7 +203,6 @@ export default function Startups() {
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mt-6 sm:mt-8 text-center">
         <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 bg-slate-900/50 border border-white/5 rounded-lg sm:rounded-xl">
-          <Rocket className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-yellow-500 shrink-0" aria-hidden />
           <span className="text-[10px] sm:text-xs text-slate-400 font-medium">More products in stealth — email me if curious</span>
         </div>
       </motion.div>

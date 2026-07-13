@@ -1,18 +1,50 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   ArrowRight, Bot, User, Sparkles, UserCircle, Rocket, Code2, Mail,
-  Terminal, Download, Calendar, Briefcase, ChevronDown,
+  Terminal as TerminalIcon, Download, Calendar, Briefcase, ChevronDown, Volume2,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import { PROFILE, IMPACT_METRICS } from '../data/profile';
 import { getAIResponse } from '../lib/getAIResponse';
+import { playSound } from '../lib/sound';
 
-const QUICK_QUERIES = [
-  { label: 'About Me', action: 'about', icon: UserCircle },
-  { label: 'Projects', action: 'projects', icon: Rocket },
-  { label: 'Skills', action: 'skills', icon: Code2 },
-  { label: 'Contact', action: 'contact', icon: Mail },
+const SUGGESTED_PROMPTS = [
+  { label: "What's PathShala AI?", query: "What is PathShala AI?" },
+  { label: "What's your tech stack?", query: "What is your tech stack?" },
+  { label: "Tell me about your experience.", query: "Tell me about your experience." }
 ];
+
+function MagneticButton({ children, as: Component = 'button', ...props }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { damping: 15, stiffness: 150, mass: 0.1 });
+  const springY = useSpring(y, { damping: 15, stiffness: 150, mass: 0.1 });
+
+  const handleMouseMove = (e) => {
+    const { clientX, clientY } = e;
+    const { height, width, left, top } = e.currentTarget.getBoundingClientRect();
+    const middleX = clientX - (left + width / 2);
+    const middleY = clientY - (top + height / 2);
+    x.set(middleX * 0.2);
+    y.set(middleY * 0.2);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      style={{ x: springX, y: springY }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="inline-block"
+    >
+      <Component {...props}>{children}</Component>
+    </motion.div>
+  );
+}
 
 /* Animated counter */
 function AnimatedCounter({ value, suffix }) {
@@ -50,7 +82,13 @@ export default function Hero({ onNavigate }) {
   const [query, setQuery] = useState('');
   const [isThinking, setIsThinking] = useState(false);
   const [chatLog, setChatLog] = useState([]);
+  const [showTooltip, setShowTooltip] = useState(false);
   const msgId = useRef(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowTooltip(true), 2800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const appendMessage = useCallback((role, content) => {
     msgId.current += 1;
@@ -60,6 +98,7 @@ export default function Hero({ onNavigate }) {
   const handleSearch = useCallback(
     (text) => {
       const { content, target } = getAIResponse(text);
+      playSound('success');
       appendMessage('assistant', content);
       setIsThinking(false);
       setTimeout(() => onNavigate(target), 2000);
@@ -70,6 +109,7 @@ export default function Hero({ onNavigate }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!query.trim() || isThinking) return;
+    playSound('click');
     const userMsg = query.trim();
     appendMessage('user', userMsg);
     setQuery('');
@@ -97,7 +137,7 @@ export default function Hero({ onNavigate }) {
             {/* Avatar + status */}
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="relative shrink-0">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl overflow-hidden border-2 border-yellow-500/50 shadow-lg shadow-yellow-500/20">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-lg">
                   <img
                     src={PROFILE.avatar}
                     alt={PROFILE.name}
@@ -124,13 +164,13 @@ export default function Hero({ onNavigate }) {
 
             {/* Headline */}
             <div className="space-y-3 sm:space-y-4 min-w-0">
-              <p className="section-label">IEEE Researcher · AI Engineer</p>
+              <p className="section-label text-slate-500">IEEE Researcher · AI Engineer</p>
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-black text-white leading-[1.1] tracking-tight">
                 Building AI Products<br />
-                <span className="gradient-text">That Solve Real Problems.</span>
+                That Solve Real Problems.
               </h1>
               <div className="space-y-1">
-                <p className="text-sm sm:text-base md:text-lg text-yellow-400 font-black tracking-tight">
+                <p className="text-sm sm:text-base md:text-lg text-slate-300 font-black tracking-tight">
                   IEEE Researcher
                 </p>
                 <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-medium">
@@ -140,8 +180,8 @@ export default function Hero({ onNavigate }) {
             </div>
 
             {/* Metrics strip */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-3">
-              {IMPACT_METRICS.slice(0, 3).map((m) => (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+              {IMPACT_METRICS.slice(0, 4).map((m) => (
                 <div
                   key={m.label}
                   className="bg-slate-900/60 border border-white/8 rounded-xl p-2.5 sm:p-3 text-center"
@@ -156,7 +196,8 @@ export default function Hero({ onNavigate }) {
 
             {/* CTA buttons */}
             <div className="flex flex-wrap gap-2 sm:gap-3">
-              <a
+              <MagneticButton
+                as="a"
                 href={PROFILE.resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -165,24 +206,26 @@ export default function Hero({ onNavigate }) {
               >
                 <Download className="w-4 h-4 shrink-0" aria-hidden />
                 <span className="whitespace-nowrap">Download Resume</span>
-              </a>
-              <a
+              </MagneticButton>
+              <MagneticButton
+                as="button"
+                type="button"
+                onClick={() => onNavigate('contact')}
+                className="cta-primary text-sm"
+                id="hero-hire-me"
+              >
+                <Briefcase className="w-4 h-4 shrink-0" aria-hidden />
+                <span className="whitespace-nowrap">Hire Me</span>
+              </MagneticButton>
+              <MagneticButton
+                as="a"
                 href={PROFILE.calendly}
                 className="cta-secondary text-sm"
                 id="hero-book-meeting"
               >
                 <Calendar className="w-4 h-4 shrink-0" aria-hidden />
                 <span className="whitespace-nowrap">Book a Meeting</span>
-              </a>
-              <button
-                type="button"
-                onClick={() => onNavigate('contact')}
-                className="cta-secondary text-sm"
-                id="hero-hire-me"
-              >
-                <Briefcase className="w-4 h-4 shrink-0" aria-hidden />
-                <span className="whitespace-nowrap">Hire Me</span>
-              </button>
+              </MagneticButton>
             </div>
           </motion.div>
 
@@ -194,23 +237,45 @@ export default function Hero({ onNavigate }) {
             className="w-full flex flex-col gap-2.5 sm:gap-3 min-w-0"
           >
             {/* Chat header */}
-            <div className="flex items-center justify-between px-0.5">
-              <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2 border-yellow-500/50 shrink-0">
-                  <img src={PROFILE.avatar} alt={PROFILE.name} className="w-full h-full object-cover" width={40} height={40} />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-white font-black text-sm flex items-center gap-1.5 truncate">
-                    CM AI <Sparkles className="w-3 h-3 text-yellow-400 shrink-0" aria-hidden />
-                  </p>
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shrink-0" aria-hidden />
-                    <span className="text-[9px] text-slate-400 font-bold tracking-widest uppercase truncate">{PROFILE.title}</span>
-                  </div>
-                </div>
+            <div className="flex items-center justify-between px-0.5 h-10 sm:h-12">
+              <div className="flex items-center gap-2 min-w-0">
+                <Bot className="w-4 h-4 text-slate-500 shrink-0" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Ask My AI Assistant</span>
               </div>
-              <div className="bg-yellow-600/10 p-1.5 sm:p-2 rounded-lg sm:rounded-xl border border-yellow-500/20 shrink-0" aria-hidden>
-                <Terminal className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-500" />
+              <div className="relative">
+                <AnimatePresence>
+                  {showTooltip && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      onClick={() => {
+                        setShowTooltip(false);
+                        onNavigate('terminal');
+                      }}
+                      className="absolute bottom-full right-0 mb-2 whitespace-nowrap bg-slate-800 text-white text-[10px] font-black uppercase tracking-wider py-1.5 px-3 rounded-lg shadow-lg border border-white/10 z-30 flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>Interactive Terminal Console</span>
+                      <span className="animate-pulse">❯</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowTooltip(false);
+                    onNavigate('terminal');
+                  }}
+                  className="relative bg-white/5 hover:bg-white/10 p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-white/10 shrink-0 transition-all active:scale-95 text-slate-400 hover:text-white"
+                  title="Open Interactive Terminal"
+                  aria-label="Open Interactive Terminal"
+                >
+                  <TerminalIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
+                </button>
               </div>
             </div>
 
@@ -218,7 +283,7 @@ export default function Hero({ onNavigate }) {
             <div className="modern-glass rounded-2xl sm:rounded-[1.75rem] p-3.5 sm:p-5 md:p-6
                             min-h-[260px] sm:min-h-[320px] lg:min-h-[380px]
                             flex flex-col gap-3 sm:gap-4 relative overflow-hidden border border-white/10">
-              <div className="absolute inset-0 bg-gradient-to-b from-yellow-500/5 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-transparent pointer-events-none" />
 
               {/* Messages */}
               <div
@@ -233,8 +298,8 @@ export default function Hero({ onNavigate }) {
                       animate={{ opacity: 1, scale: 1 }}
                       className="h-full min-h-[140px] sm:min-h-[180px] flex flex-col items-center justify-center text-center gap-3 sm:gap-4 py-6 sm:py-8"
                     >
-                      <div className="w-12 h-12 sm:w-14 sm:h-14 bg-yellow-500/10 rounded-full flex items-center justify-center border border-yellow-500/20 ai-glow">
-                        <Bot className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-400" />
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
+                        <Bot className="w-6 h-6 sm:w-7 sm:h-7 text-slate-400" />
                       </div>
                       <div className="space-y-1.5 px-2">
                         <p className="text-white text-base sm:text-lg font-black tracking-tight">
@@ -257,7 +322,7 @@ export default function Hero({ onNavigate }) {
                       <div className={`flex gap-2 max-w-[90%] sm:max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                         <div
                           className={`hidden sm:flex w-7 h-7 sm:w-8 sm:h-8 rounded-xl items-center justify-center shrink-0 ${
-                            msg.role === 'user' ? 'bg-yellow-500 text-slate-950 font-black' : 'bg-slate-800 text-yellow-400 border border-slate-700'
+                            msg.role === 'user' ? 'bg-slate-700 text-white' : 'bg-slate-800 text-slate-400 border border-slate-700'
                           }`}
                           aria-hidden
                         >
@@ -266,12 +331,30 @@ export default function Hero({ onNavigate }) {
                         <div
                           className={`p-3 sm:p-4 rounded-2xl text-xs sm:text-sm font-medium leading-relaxed shadow-lg break-words ${
                             msg.role === 'user'
-                              ? 'bg-yellow-500 text-slate-950 font-black'
+                              ? 'bg-slate-700 text-white rounded-tr-sm'
                               : 'bg-slate-800/80 text-white border border-white/5 rounded-tl-sm backdrop-blur-xl'
                           }`}
                         >
                           {msg.content}
                         </div>
+                        {msg.role === 'assistant' && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if ('speechSynthesis' in window) {
+                                window.speechSynthesis.cancel();
+                                const utterance = new SpeechSynthesisUtterance(msg.content);
+                                utterance.rate = 1.05;
+                                window.speechSynthesis.speak(utterance);
+                              }
+                            }}
+                            className="touch-target p-1.5 self-center rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 border border-white/5 shrink-0 transition-all active:scale-95 ml-1"
+                            title="Speak message"
+                            aria-label="Speak message"
+                          >
+                            <Volume2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
                       </div>
                     </motion.div>
                   ))}
@@ -285,46 +368,45 @@ export default function Hero({ onNavigate }) {
                     >
                       <div className="flex gap-2.5 items-center bg-slate-800/50 px-3.5 py-2.5 rounded-2xl border border-white/5">
                         <div className="flex gap-1" aria-hidden>
-                          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full animate-bounce" />
-                          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-slate-400 rounded-full animate-bounce" />
+                          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
                         </div>
-                        <span className="text-[9px] sm:text-[10px] text-yellow-400 font-black tracking-widest uppercase">Analyzing...</span>
+                        <span className="text-[9px] sm:text-[10px] text-slate-400 font-black tracking-widest uppercase">Analyzing...</span>
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
 
-              {/* Quick chips */}
-              <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-1.5 sm:gap-2">
-                {QUICK_QUERIES.map((q, i) => {
-                  const Icon = q.icon;
-                  return (
+              {/* Suggested Prompts */}
+              <div className="space-y-2 border-t border-white/5 pt-3 shrink-0">
+                <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Suggested Prompts:</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {SUGGESTED_PROMPTS.map((p, i) => (
                     <motion.button
-                      key={q.action}
+                      key={i}
                       type="button"
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 + i * 0.1 }}
                       onClick={() => {
                         if (isThinking) return;
-                        appendMessage('user', q.label);
+                        appendMessage('user', p.label);
                         setIsThinking(true);
-                        setTimeout(() => handleSearch(q.label), 300);
+                        setTimeout(() => handleSearch(p.query), 300);
                       }}
                       disabled={isThinking}
-                      className="touch-target flex items-center justify-center sm:justify-start gap-1.5 px-2.5 sm:px-3 py-2 bg-white/5 hover:bg-white/10 border border-white/5 rounded-lg sm:rounded-xl text-[9px] sm:text-[10px] font-black text-slate-300 hover:text-white transition-all active:scale-95 uppercase tracking-wider disabled:opacity-50"
+                      className="touch-target flex items-center justify-center text-center px-2 py-1.5 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl text-[10px] font-bold text-slate-300 hover:text-white transition-all active:scale-95 disabled:opacity-50"
                     >
-                      <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" aria-hidden />
-                      <span className="truncate">{q.label}</span>
+                      <span className="truncate">{p.label}</span>
                     </motion.button>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
 
               {/* Input */}
-              <form onSubmit={handleSubmit} className="relative flex items-center">
+              <form onSubmit={handleSubmit} className="relative flex items-center shrink-0">
                 <label htmlFor="cm-ai-input" className="sr-only">Message CM AI</label>
                 <input
                   id="cm-ai-input"
@@ -335,12 +417,12 @@ export default function Hero({ onNavigate }) {
                   disabled={isThinking}
                   enterKeyHint="send"
                   autoComplete="off"
-                  className="w-full min-w-0 pl-3.5 sm:pl-5 pr-12 sm:pr-14 py-3 sm:py-3.5 bg-slate-950/80 backdrop-blur-3xl border-2 border-white/10 rounded-xl sm:rounded-2xl text-white placeholder:text-slate-600 focus:outline-none focus:border-yellow-500/50 focus:ring-4 focus:ring-yellow-500/5 transition-all text-sm shadow-inner"
+                  className="w-full min-w-0 pl-3.5 sm:pl-5 pr-12 sm:pr-14 py-3 sm:py-3.5 bg-slate-950/80 backdrop-blur-3xl border border-white/10 rounded-xl sm:rounded-2xl text-white placeholder:text-slate-600 focus:outline-none focus:border-white/30 focus:ring-4 focus:ring-white/5 transition-all text-sm shadow-inner"
                 />
                 <button
                   type="submit"
                   disabled={isThinking || !query.trim()}
-                  className="touch-target absolute right-1.5 sm:right-2 p-2 sm:p-2.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 rounded-lg sm:rounded-xl transition-all shadow-glow active:scale-95"
+                  className="touch-target absolute right-1.5 sm:right-2 p-2 sm:p-2.5 bg-white hover:bg-slate-200 disabled:bg-slate-800 disabled:text-slate-600 text-slate-950 rounded-lg sm:rounded-xl transition-all active:scale-95"
                   aria-label="Send message"
                 >
                   <ArrowRight className="w-4 h-4" />
@@ -364,7 +446,7 @@ export default function Hero({ onNavigate }) {
             aria-label="Explore more"
           >
             <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Explore</span>
-            <ChevronDown className="w-4 h-4 animate-bounce group-hover:text-yellow-400 transition-colors" />
+            <ChevronDown className="w-4 h-4 animate-bounce group-hover:text-white transition-colors" />
           </button>
         </motion.div>
       </div>

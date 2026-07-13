@@ -17,7 +17,15 @@ export const PROFILE = {
 };
 
 export const SUMMARY =
-  'CSE undergraduate at Brainware University specializing in AI Full-Stack Development with hands-on experience building production-ready RAG systems, NLP pipelines, and AI-powered applications. Skilled in FastAPI, React, LangChain, FAISS, Docker, PyTorch, and modern LLM workflows. Built semantic retrieval systems processing 10,000+ documents and scalable AI applications with optimized inference pipelines. IEEE-published researcher, Top 1,000 national innovator, and Top 25 HP Dreams Unlocked finalist.';
+  'CSE undergraduate at Brainware University specializing in AI Full-Stack Development. I focus on building production-ready RAG systems, NLP pipelines, and robust web applications.';
+
+export const CREDENTIALS = [
+  'Built RAG systems for 10,000+ documents',
+  'Optimized local LLM inference pipelines',
+  'Published IEEE Researcher (2026)',
+  'Top 1,000 National Innovator',
+  'HP Dreams Unlocked Finalist'
+];
 
 export const EDUCATION = {
   degree: 'B.Tech in Computer Science and Engineering',
@@ -190,12 +198,12 @@ export const SKILL_CATEGORIES = [
 ];
 
 export const IMPACT_METRICS = [
-  { label: 'AI Projects', value: 10, suffix: '+', icon: '🤖' },
-  { label: 'GitHub Repos', value: 25, suffix: '+', icon: '📦' },
-  { label: 'Technologies', value: 15, suffix: '+', icon: '⚡' },
-  { label: 'Hackathons', value: 3, suffix: '', icon: '🏆' },
-  { label: 'IEEE Paper', value: 1, suffix: '', icon: '📄' },
-  { label: 'Accuracy', value: 94, suffix: '%', icon: '🎯' },
+  { label: 'AI Projects', value: 10, suffix: '+' },
+  { label: 'GitHub Repos', value: 25, suffix: '+' },
+  { label: 'Technologies', value: 15, suffix: '+' },
+  { label: 'IEEE Research', value: 2026, suffix: ' · Pub' },
+  { label: 'Hackathons', value: 3, suffix: '' },
+  { label: 'Accuracy', value: 94, suffix: '%' },
 ];
 
 export const TIMELINE = [
@@ -255,6 +263,7 @@ export const STARTUPS = [
     problem: 'Quality competitive exam preparation is locked behind expensive coaching, and language barriers make it harder for regional medium students to crack national exams.',
     solution: 'Voice-based learning and explanations in Bengali in under 2 minutes. Speak doubts out loud and receive instant, exam-focused voice explanations.',
     tech: ['Voice AI', 'RAG', 'LangChain', 'FastAPI', 'React'],
+    architecture: 'User Voice → React UI → FastAPI → Whisper → LangChain → Gemma → TTS → User',
     website: 'https://www.pathshala-ai.com/',
     linkedin: 'https://www.linkedin.com/company/pathshalaaiindia/',
   },
