@@ -22,11 +22,14 @@ export default function Header({ onAbout }) {
       <button
         type="button"
         onClick={onAbout}
-        className="touch-target p-2.5 md:p-3 transition-all rounded-2xl bg-white/80 backdrop-blur-xl border border-brand-border/60 hover:border-brand-teal/30 pointer-events-auto group shrink-0"
+        className="flex items-center gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 transition-all rounded-2xl bg-white/80 backdrop-blur-xl border border-brand-border/60 hover:border-brand-teal/30 pointer-events-auto group shrink-0"
         style={{ boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)' }}
         aria-label="About Chandril Mallick"
       >
-        <Info className="w-5 h-5 md:w-6 md:h-6 text-brand-muted group-hover:text-brand-teal transition-colors" />
+        <Info className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-brand-teal group-hover:scale-110 transition-transform" />
+        <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-brand-dark group-hover:text-brand-teal transition-colors">
+          About
+        </span>
       </button>
     </header>
   );

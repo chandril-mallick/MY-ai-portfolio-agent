@@ -59,7 +59,7 @@ export default function Navbar({ activeSection, onNavigate, hidden = false }) {
                 /* Colors */
                 isActive
                   ? 'text-white font-black'
-                  : 'text-brand-muted hover:text-brand-dark active:bg-brand-section',
+                  : 'text-brand-body font-bold hover:text-brand-dark hover:bg-brand-section/80 active:bg-brand-section',
               )}
               aria-label={item.label}
               aria-current={isActive ? 'page' : undefined}

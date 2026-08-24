@@ -136,7 +136,7 @@ export default function Hero({ onNavigate }) {
 
   return (
     <div className="w-full min-h-[100dvh] flex flex-col justify-center px-4 sm:px-6 lg:px-8
-                    pt-[calc(4rem+env(safe-area-inset-top,0px))]
+                    pt-[calc(5.5rem+env(safe-area-inset-top,0px))] md:pt-[calc(6.5rem+env(safe-area-inset-top,0px))]
                     pb-[calc(5rem+env(safe-area-inset-bottom,0px))]">
       <div className="w-full max-w-7xl mx-auto">
 
@@ -190,14 +190,9 @@ export default function Hero({ onNavigate }) {
                   <span className="absolute bottom-0 left-0 h-[3px] bg-brand-teal/30 rounded-full animate-underline-draw" />
                 </span>
               </h1>
-              <div className="space-y-1">
-                <p className="text-sm sm:text-base md:text-lg text-brand-dark font-black tracking-tight">
-                  IEEE Researcher
-                </p>
-                <p className="text-xs sm:text-sm text-brand-body leading-relaxed font-medium">
-                  Building PathShala AI.
-                </p>
-              </div>
+              <p className="text-sm sm:text-base text-brand-body leading-relaxed font-medium">
+                Building PathShala AI.
+              </p>
             </div>
 
             {/* Metrics strip */}
@@ -268,43 +263,17 @@ export default function Hero({ onNavigate }) {
                 <Bot className="w-4 h-4 text-brand-teal shrink-0" />
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-body">Ask My AI Assistant</span>
               </div>
-              <div className="relative">
-                <AnimatePresence>
-                  {showTooltip && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      onClick={() => {
-                        setShowTooltip(false);
-                        onNavigate('terminal');
-                      }}
-                      className="absolute bottom-full right-0 mb-2 whitespace-nowrap bg-white text-brand-dark text-[10px] font-black uppercase tracking-wider py-1.5 px-3 rounded-lg border border-brand-border z-30 flex items-center gap-1 cursor-pointer"
-                      style={{ boxShadow: '0 4px 12px rgba(15, 23, 42, 0.08)' }}
-                    >
-                      <span>Interactive Terminal Console</span>
-                      <span className="animate-pulse text-brand-teal">❯</span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowTooltip(false);
-                    onNavigate('terminal');
-                  }}
-                  className="relative bg-white hover:bg-brand-section p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-brand-border shrink-0 transition-all active:scale-95 text-brand-muted hover:text-brand-teal"
-                  style={{ boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)' }}
-                  title="Open Interactive Terminal"
-                  aria-label="Open Interactive Terminal"
-                >
-                  <TerminalIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-teal opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-teal"></span>
-                  </span>
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => onNavigate('terminal')}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-brand-section text-brand-dark border border-brand-border hover:border-brand-teal/40 rounded-xl transition-all shadow-sm active:scale-95 text-[10px] font-black uppercase tracking-wider group shrink-0"
+                title="Open Interactive Terminal Console"
+                aria-label="Open Interactive Terminal Console"
+              >
+                <TerminalIcon className="w-3.5 h-3.5 text-brand-teal group-hover:scale-110 transition-transform" />
+                <span>Terminal</span>
+                <span className="text-brand-teal opacity-70 group-hover:translate-x-0.5 transition-transform">❯</span>
+              </button>
             </div>
 
             {/* Chat window */}
@@ -412,6 +381,22 @@ export default function Hero({ onNavigate }) {
                 <div ref={chatEndRef} />
               </div>
 
+              {/* Active Project Highlight Bar to balance right panel */}
+              <div className="flex items-center justify-between px-3 py-2 bg-brand-section/80 border border-brand-border/60 rounded-xl text-[10px] text-brand-body font-medium shrink-0">
+                <div className="flex items-center gap-1.5 truncate">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-teal animate-pulse" />
+                  <span className="font-bold text-brand-dark">Active Build:</span>
+                  <span className="truncate text-brand-body">PathShala AI (RAG & NLP)</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('projects')}
+                  className="text-brand-teal font-bold hover:underline shrink-0 ml-2 uppercase text-[9px] tracking-wider"
+                >
+                  View Projects →
+                </button>
+              </div>
+
               {/* Suggested Prompts */}
               <div className="space-y-2 border-t border-brand-border/60 pt-3 shrink-0">
                 <p className="text-[9px] text-brand-muted font-bold uppercase tracking-widest">Suggested Prompts:</p>
@@ -465,7 +450,7 @@ export default function Hero({ onNavigate }) {
           </motion.div>
         </div>
 
-        {/* Scroll hint */}
+        {/* High Contrast Scroll hint */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -475,11 +460,11 @@ export default function Hero({ onNavigate }) {
           <button
             type="button"
             onClick={() => onNavigate('about')}
-            className="flex flex-col items-center gap-1 text-brand-muted hover:text-brand-teal transition-colors group"
-            aria-label="Explore more"
+            className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-soft-teal text-brand-dark hover:text-brand-teal border border-brand-border hover:border-brand-teal/30 rounded-full transition-all shadow-sm active:scale-95 group font-bold text-xs"
+            aria-label="Explore portfolio"
           >
-            <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Explore</span>
-            <ChevronDown className="w-4 h-4 animate-bounce group-hover:text-brand-teal transition-colors" />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Explore Sections</span>
+            <ChevronDown className="w-4 h-4 animate-bounce text-brand-teal group-hover:translate-y-0.5 transition-transform" />
           </button>
         </motion.div>
       </div>
