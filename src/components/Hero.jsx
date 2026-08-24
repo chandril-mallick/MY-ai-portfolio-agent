@@ -244,6 +244,8 @@ export default function Hero({ onNavigate }) {
               <MagneticButton
                 as="a"
                 href={PROFILE.calendly}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="cta-secondary text-sm"
                 id="hero-book-meeting"
               >

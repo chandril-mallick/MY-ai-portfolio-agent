@@ -10,10 +10,10 @@ export const PROFILE = {
   linkedin: 'https://linkedin.com/in/chandril-mallick',
   github: 'https://github.com/chandril-mallick',
   portfolio: 'https://chandril-dev.online/',
-  resumeUrl: '/resume.pdf',
+  resumeUrl: '/Chandril_Mallick_Resume.pdf',
   avatar: '/WhatsApp Image 2025-12-27 at 19.32.06.jpeg',
   openToWork: true,
-  calendly: 'mailto:chandrilmallick1@gmail.com?subject=Meeting%20Request',
+  calendly: 'https://calendly.com/chandrilmallick1/30min',
 };
 
 export const SUMMARY =
