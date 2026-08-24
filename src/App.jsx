@@ -54,7 +54,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-slate-950 text-slate-100 font-sans selection:bg-yellow-500/30 overflow-x-hidden relative">
+    <div className="min-h-[100dvh] bg-brand-bg text-brand-dark font-sans overflow-x-hidden relative">
       <CustomCursor />
       <FluidBackground />
       <Header onAbout={() => handleNavigate('about')} />
@@ -71,7 +71,7 @@ function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[55] bg-slate-950/70 backdrop-blur-sm cursor-default"
+              className="fixed inset-0 z-[55] bg-brand-dark/20 backdrop-blur-sm cursor-default"
               onClick={closeModal}
               aria-label="Close section"
             />

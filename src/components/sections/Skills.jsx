@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { SKILL_CATEGORIES } from '../../data/profile';
 
+const CATEGORY_COLORS = ['#0F9D8A', '#14B8A6', '#059669', '#0D9488', '#0E7490'];
+
 export default function Skills() {
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -36,27 +38,28 @@ export default function Skills() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center max-w-2xl mx-auto px-2 shrink-0"
       >
-        <p className="section-label mb-2 sm:mb-3 text-slate-400">Technical Arsenal</p>
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight mb-2 sm:mb-3">
-          Interactive <span className="text-slate-300">Skill Map</span>
+        <p className="section-label mb-2 sm:mb-3">Technical Arsenal</p>
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-brand-heading tracking-tight mb-2 sm:mb-3">
+          Interactive <span className="gradient-text">Skill Map</span>
         </h2>
-        <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+        <p className="text-brand-body text-sm sm:text-base leading-relaxed">
           Drag the skill nodes around to interact with the particle map.
         </p>
       </motion.div>
 
       <div 
         ref={containerRef}
-        className="relative w-full h-[50vh] min-h-[400px] border border-white/5 bg-slate-900/30 rounded-3xl overflow-hidden cursor-crosshair flex items-center justify-center"
+        className="relative w-full h-[50vh] min-h-[400px] border border-brand-border/60 bg-white rounded-3xl overflow-hidden cursor-crosshair flex items-center justify-center"
+        style={{ boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.06)' }}
       >
         {/* Background grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#94A3B808_1px,transparent_1px),linear-gradient(to_bottom,#94A3B808_1px,transparent_1px)] bg-[size:24px_24px]" />
         
         {/* Particle Cloud */}
         {dimensions.width > 0 && allSkills.map((skill, index) => {
-          // Generate a somewhat random but deterministic starting position within constraints
           const randomX = Math.sin(index * 13.5) * (dimensions.width / 3);
           const randomY = Math.cos(index * 11.2) * (dimensions.height / 3);
+          const accentColor = CATEGORY_COLORS[skill.catIndex % CATEGORY_COLORS.length];
           
           return (
             <motion.div
@@ -80,16 +83,15 @@ export default function Skills() {
                 damping: 15,
                 delay: index * 0.03,
               }}
-              className="absolute px-4 py-2 sm:px-5 sm:py-2.5 rounded-full backdrop-blur-md border shadow-xl flex flex-col items-center justify-center gap-0.5 cursor-grab group select-none"
+              className="absolute px-4 py-2 sm:px-5 sm:py-2.5 rounded-full backdrop-blur-md border shadow-premium flex flex-col items-center justify-center gap-0.5 cursor-grab group select-none"
               style={{
-                // We use standard neutral colors to avoid gold overuse
-                backgroundColor: 'rgba(30, 41, 59, 0.7)',
-                borderColor: 'rgba(255, 255, 255, 0.1)',
-                color: 'white',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                borderColor: `${accentColor}20`,
+                color: '#0F172A',
               }}
             >
               <span className="text-xs sm:text-sm font-black tracking-tight whitespace-nowrap">{skill.name}</span>
-              <span className="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase tracking-widest">{skill.category}</span>
+              <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest" style={{ color: accentColor }}>{skill.category}</span>
             </motion.div>
           );
         })}
@@ -104,8 +106,8 @@ export default function Skills() {
       >
         {SKILL_CATEGORIES.map((cat, i) => (
           <div key={cat.title} className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full bg-slate-500" />
-            <span className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">{cat.title}</span>
+            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: CATEGORY_COLORS[i % CATEGORY_COLORS.length] }} />
+            <span className="text-[10px] sm:text-xs font-bold text-brand-body uppercase tracking-widest">{cat.title}</span>
           </div>
         ))}
       </motion.div>

@@ -4,27 +4,29 @@ import { PROFILE } from '../data/profile';
 
 export default function Header({ onAbout }) {
   return (
-    <header className="fixed top-0 left-0 right-0 z-[70] flex items-center justify-between px-3 sm:px-4 md:px-12 py-3 md:py-6 pointer-events-none safe-top">
+    <header className="fixed top-0 left-0 right-0 z-[70] flex items-center justify-between px-3 sm:px-4 md:px-12 py-3 md:py-5 pointer-events-none safe-top">
       <button
         type="button"
         onClick={onAbout}
-        className="flex flex-col items-start gap-0.5 pointer-events-auto min-w-0 max-w-[75%] text-left rounded-xl hover:bg-white/5 px-1 py-0.5 -ml-1 transition-colors"
+        className="flex flex-col items-start gap-0.5 pointer-events-auto min-w-0 max-w-[75%] text-left rounded-2xl bg-white/80 backdrop-blur-xl border border-brand-border/60 hover:border-brand-teal/30 px-3 py-2 sm:px-4 sm:py-2.5 -ml-1 transition-all duration-200"
+        style={{ boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.06)' }}
         aria-label="Open about section"
       >
-        <span className="text-[10px] sm:text-xs md:text-sm font-black text-white uppercase tracking-[0.2em] sm:tracking-[0.3em] opacity-80 truncate w-full">
+        <span className="text-[10px] sm:text-xs md:text-sm font-black text-brand-dark uppercase tracking-[0.2em] sm:tracking-[0.3em] truncate w-full">
           {PROFILE.name}
         </span>
-        <span className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate w-full">
+        <span className="text-[9px] sm:text-[10px] font-bold text-brand-body uppercase tracking-widest truncate w-full">
           {PROFILE.title} · Brainware University
         </span>
       </button>
       <button
         type="button"
         onClick={onAbout}
-        className="touch-target p-2.5 md:p-3 transition-all rounded-2xl hover:bg-white/10 pointer-events-auto group shrink-0"
+        className="touch-target p-2.5 md:p-3 transition-all rounded-2xl bg-white/80 backdrop-blur-xl border border-brand-border/60 hover:border-brand-teal/30 pointer-events-auto group shrink-0"
+        style={{ boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)' }}
         aria-label="About Chandril Mallick"
       >
-        <Info className="w-5 h-5 md:w-6 md:h-6 text-white/40 group-hover:text-white transition-colors" />
+        <Info className="w-5 h-5 md:w-6 md:h-6 text-brand-muted group-hover:text-brand-teal transition-colors" />
       </button>
     </header>
   );

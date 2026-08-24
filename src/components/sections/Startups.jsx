@@ -45,25 +45,20 @@ function TiltCard({ children, className }) {
 }
 
 const STATUS_STYLES = {
-  Building: 'bg-slate-800/50 text-slate-300 border-white/10',
-  Stealth:  'bg-slate-800/50 text-slate-400 border-white/10',
-  Prototype:'bg-slate-800/50 text-slate-400 border-white/10',
-  'Beta Cohort': 'bg-slate-800/50 text-slate-300 border-white/10',
+  Building: 'bg-soft-teal text-brand-teal border-brand-teal/20',
+  Stealth:  'bg-brand-section text-brand-body border-brand-border',
+  Prototype:'bg-brand-section text-brand-body border-brand-border',
+  'Beta Cohort': 'bg-soft-teal text-brand-teal border-brand-teal/20',
 };
 const PULSE_COLORS = {
-  Building: 'bg-slate-300',
-  Stealth:  'bg-slate-400',
-  Prototype:'bg-slate-400',
-  'Beta Cohort': 'bg-slate-300',
+  Building: 'bg-brand-teal',
+  Stealth:  'bg-brand-muted',
+  Prototype:'bg-brand-muted',
+  'Beta Cohort': 'bg-brand-teal',
 };
-const CARD_GRADIENTS = [
-  'from-slate-800/20 via-transparent to-transparent border-white/5 hover:border-white/20',
-];
-const BLOB_COLOR = '#475569'; // slate-600
 
 function StartupCard({ startup, index }) {
   const [expanded, setExpanded] = useState(false);
-  const gradient = CARD_GRADIENTS[0];
 
   return (
     <motion.article
@@ -72,11 +67,13 @@ function StartupCard({ startup, index }) {
       transition={{ delay: index * 0.1, duration: 0.45 }}
       className="group perspective-1000"
     >
-      <TiltCard className={`relative rounded-xl sm:rounded-2xl md:rounded-[1.75rem] bg-gradient-to-br ${gradient} border p-4 sm:p-6 md:p-8 transition-all duration-300 overflow-hidden`}>
+      <TiltCard className="relative rounded-xl sm:rounded-2xl md:rounded-[1.75rem] bg-white border border-brand-border hover:border-brand-teal/30 p-4 sm:p-6 md:p-8 transition-all duration-300 overflow-hidden"
+        style={{ boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.06)' }}
+      >
       {/* Decorative blob */}
       <div
-        className="absolute -top-8 -right-8 w-24 h-24 sm:w-32 sm:h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none"
-        style={{ background: BLOB_COLOR }}
+        className="absolute -top-8 -right-8 w-24 h-24 sm:w-32 sm:h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none"
+        style={{ background: '#0F9D8A' }}
         aria-hidden
       />
 
@@ -84,17 +81,19 @@ function StartupCard({ startup, index }) {
       <div className="flex items-start justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           {startup.logoUrl ? (
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-white/10 overflow-hidden shrink-0 bg-white flex items-center justify-center p-0.5 shadow-md">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-brand-border overflow-hidden shrink-0 bg-white flex items-center justify-center p-0.5"
+              style={{ boxShadow: '0 1px 4px rgba(15, 23, 42, 0.06)' }}
+            >
               <img src={startup.logoUrl} alt={startup.name} className="w-full h-full object-contain" />
             </div>
           ) : (
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center shrink-0">
-              <span className="text-white font-black text-lg">{startup.name.charAt(0)}</span>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-brand-border bg-soft-teal flex items-center justify-center shrink-0">
+              <span className="text-brand-teal font-black text-lg">{startup.name.charAt(0)}</span>
             </div>
           )}
           <div className="min-w-0">
-            <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white tracking-tight leading-tight truncate">{startup.name}</h3>
-            <p className="text-slate-400 text-xs sm:text-sm font-medium mt-0.5 line-clamp-1">{startup.tagline}</p>
+            <h3 className="text-lg sm:text-xl md:text-2xl font-black text-brand-heading tracking-tight leading-tight truncate">{startup.name}</h3>
+            <p className="text-brand-body text-xs sm:text-sm font-medium mt-0.5 line-clamp-1">{startup.tagline}</p>
           </div>
         </div>
         <span className={`status-badge border ${STATUS_STYLES[startup.status]} shrink-0 text-[8px] sm:text-[9px]`}>
@@ -104,45 +103,45 @@ function StartupCard({ startup, index }) {
       </div>
 
       {/* Description */}
-      <p className="text-slate-300 text-xs sm:text-sm md:text-base leading-relaxed mb-4 sm:mb-5">{startup.description}</p>
+      <p className="text-brand-body text-xs sm:text-sm md:text-base leading-relaxed mb-4 sm:mb-5">{startup.description}</p>
 
       {/* Expandable deep dive */}
       {expanded && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className="mb-4 sm:mb-5 space-y-3 sm:space-y-4 border-t border-white/5 pt-4 sm:pt-5"
+          className="mb-4 sm:mb-5 space-y-3 sm:space-y-4 border-t border-brand-border/60 pt-4 sm:pt-5"
         >
           <div>
-            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1.5">The Problem</p>
-            <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">{startup.problem}</p>
+            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-brand-muted mb-1.5">The Problem</p>
+            <p className="text-brand-body text-xs sm:text-sm leading-relaxed">{startup.problem}</p>
           </div>
           <div>
-            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1.5">The Solution</p>
-            <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">{startup.solution}</p>
+            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-brand-muted mb-1.5">The Solution</p>
+            <p className="text-brand-body text-xs sm:text-sm leading-relaxed">{startup.solution}</p>
           </div>
         </motion.div>
       )}
 
       {/* Architecture */}
       {startup.architecture && expanded && (
-        <div className="flex items-start gap-2 bg-slate-900/50 border border-white/5 rounded-xl p-3 sm:p-4 mb-4 sm:mb-5">
+        <div className="flex items-start gap-2 bg-brand-section border border-brand-border/60 rounded-xl p-3 sm:p-4 mb-4 sm:mb-5">
           <div className="min-w-0">
-            <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">Architecture</p>
-            <p className="text-slate-300 text-[10px] sm:text-xs font-mono leading-relaxed break-words">{startup.architecture}</p>
+            <p className="text-[9px] font-black uppercase tracking-widest text-brand-muted mb-1">Architecture</p>
+            <p className="text-brand-dark text-[10px] sm:text-xs font-mono leading-relaxed break-words">{startup.architecture}</p>
           </div>
         </div>
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between flex-wrap gap-3 pt-3 border-t border-white/5 mt-1">
+      <div className="flex items-center justify-between flex-wrap gap-3 pt-3 border-t border-brand-border/60 mt-1">
         <div className="flex items-center gap-2">
           {startup.website && (
             <a
               href={startup.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-lg text-[9px] sm:text-[10px] uppercase tracking-wider transition-all shadow-sm active:scale-95"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-brand-section hover:bg-soft-teal text-brand-dark border border-brand-border hover:border-brand-teal/30 rounded-lg text-[9px] sm:text-[10px] uppercase tracking-wider transition-all shadow-sm active:scale-95"
             >
               Website
             </a>
@@ -152,7 +151,7 @@ function StartupCard({ startup, index }) {
               href={startup.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-lg text-[9px] sm:text-[10px] uppercase tracking-wider transition-all active:scale-95"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-brand-section hover:bg-soft-teal text-brand-dark border border-brand-border hover:border-brand-teal/30 rounded-lg text-[9px] sm:text-[10px] uppercase tracking-wider transition-all active:scale-95"
             >
               LinkedIn
             </a>
@@ -161,7 +160,7 @@ function StartupCard({ startup, index }) {
         <div className="flex items-center gap-3">
           <div className="flex flex-wrap gap-1 sm:gap-1.5">
             {startup.tech.map((t) => (
-              <span key={t} className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-slate-800/60 text-slate-400 rounded-md sm:rounded-lg text-[8px] sm:text-[10px] font-bold uppercase tracking-wider border border-white/5">
+              <span key={t} className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-brand-section text-brand-body rounded-md sm:rounded-lg text-[8px] sm:text-[10px] font-bold uppercase tracking-wider border border-brand-border/60">
                 {t}
               </span>
             ))}
@@ -169,7 +168,7 @@ function StartupCard({ startup, index }) {
           <button
             type="button"
             onClick={() => setExpanded((p) => !p)}
-            className="flex items-center gap-1 text-[9px] sm:text-[10px] font-black text-slate-500 hover:text-slate-300 uppercase tracking-widest transition-colors shrink-0"
+            className="flex items-center gap-1 text-[9px] sm:text-[10px] font-black text-brand-muted hover:text-brand-teal uppercase tracking-widest transition-colors shrink-0"
             aria-expanded={expanded}
           >
             {expanded ? 'Less' : 'Deep Dive'}
@@ -187,10 +186,10 @@ export default function Startups() {
     <div className="max-w-5xl mx-auto pb-4 sm:pb-10">
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-6 sm:mb-10">
         <p className="section-label mb-2 sm:mb-3">Ventures</p>
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight mb-2 sm:mb-3">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-brand-heading tracking-tight mb-2 sm:mb-3">
           Building the <span className="gradient-text">Future</span>
         </h2>
-        <p className="text-slate-400 text-xs sm:text-sm md:text-base leading-relaxed max-w-lg mx-auto">
+        <p className="text-brand-body text-xs sm:text-sm md:text-base leading-relaxed max-w-lg mx-auto">
           Products I&apos;m building to solve real problems in education and local language understanding.
         </p>
       </motion.div>
@@ -202,8 +201,8 @@ export default function Startups() {
       </div>
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mt-6 sm:mt-8 text-center">
-        <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 bg-slate-900/50 border border-white/5 rounded-lg sm:rounded-xl">
-          <span className="text-[10px] sm:text-xs text-slate-400 font-medium">More products in stealth — email me if curious</span>
+        <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 bg-brand-section border border-brand-border/60 rounded-lg sm:rounded-xl">
+          <span className="text-[10px] sm:text-xs text-brand-body font-medium">More products in stealth — email me if curious</span>
         </div>
       </motion.div>
     </div>

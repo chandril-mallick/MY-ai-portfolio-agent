@@ -11,12 +11,17 @@
   }
 
   body {
-    @apply bg-slate-950 text-slate-100 antialiased selection:bg-yellow-500/30;
+    @apply bg-brand-bg text-brand-dark antialiased;
     overflow-x: hidden;
     min-height: 100dvh;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    /* Prevent layout shift from scrollbar */
     scrollbar-gutter: stable;
+    /* Light premium selection */
+    --selection-bg: rgba(15, 157, 138, 0.15);
+  }
+
+  ::selection {
+    background: var(--selection-bg);
   }
 
   /* Prevent iOS from zooming inputs on focus */
@@ -37,23 +42,43 @@
 }
 
 @layer components {
+  /* ─── Premium Light Glass Card ─── */
   .modern-glass {
-    @apply bg-slate-900/40 backdrop-blur-3xl border border-white/10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)];
+    @apply bg-white/80 backdrop-blur-xl border border-brand-border/80;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.06);
   }
 
+  /* ─── Teal Glow Border ─── */
   .glow-border {
-    @apply relative border border-yellow-500/20 shadow-[0_0_20px_rgba(234,179,8,0.1)] hover:border-yellow-500/50 hover:shadow-[0_0_30px_rgba(234,179,8,0.2)] transition-all duration-300;
+    @apply relative border border-brand-teal/20;
+    box-shadow: 0 0 20px rgba(15, 157, 138, 0.08);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
 
+  .glow-border:hover {
+    @apply border-brand-teal/40;
+    box-shadow: 0 0 30px rgba(15, 157, 138, 0.15);
+  }
+
+  /* ─── AI Glow ─── */
   .ai-glow {
-    @apply relative after:absolute after:inset-0 after:rounded-full after:bg-yellow-600/20 after:blur-[100px] after:-z-10;
+    @apply relative;
   }
 
+  .ai-glow::after {
+    content: '';
+    @apply absolute inset-0 rounded-full -z-10;
+    background: rgba(15, 157, 138, 0.08);
+    filter: blur(60px);
+  }
+
+  /* ─── Typing Cursor ─── */
   .typing-cursor::after {
     content: '|';
-    @apply animate-pulse ml-1 text-yellow-400 font-bold;
+    @apply animate-pulse ml-1 text-brand-teal font-bold;
   }
 
+  /* ─── Safe Area ─── */
   .safe-top {
     padding-top: env(safe-area-inset-top, 0px);
   }
@@ -62,19 +87,22 @@
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
+  /* ─── Touch Target ─── */
   .touch-target {
     @apply min-h-[44px] min-w-[44px];
   }
 
-  /* Border opacity variant not available in Tailwind v3 for /8 */
-  .border-white\/8 {
-    border-color: rgba(255, 255, 255, 0.08);
-  }
-
+  /* ─── Shadow Glow (Teal) ─── */
   .shadow-glow {
-    box-shadow: 0 0 24px rgba(234, 179, 8, 0.3), 0 0 48px rgba(253, 224, 71, 0.1);
+    box-shadow: 0 0 16px rgba(15, 157, 138, 0.2), 0 0 32px rgba(15, 157, 138, 0.08);
   }
 
+  /* ─── Shadow Glow (Yellow for Hire Me) ─── */
+  .shadow-glow-yellow {
+    box-shadow: 0 0 16px rgba(251, 191, 36, 0.25), 0 0 32px rgba(251, 191, 36, 0.1);
+  }
+
+  /* ─── Screen Reader Only ─── */
   .sr-only {
     position: absolute;
     width: 1px;
@@ -87,49 +115,63 @@
     border-width: 0;
   }
 
-  /* Gradient text (Yellow Theme) */
+  /* ─── Gradient Text (Teal) ─── */
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-300;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-teal via-brand-teal-light to-emerald-400;
   }
 
   .gradient-text-warm {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-teal to-brand-teal-light;
   }
 
-  /* Premium card */
+  /* ─── Premium Card (Light) ─── */
   .premium-card {
-    @apply bg-slate-900/60 backdrop-blur-xl border border-white/8 rounded-2xl shadow-2xl;
+    @apply bg-white border border-brand-border rounded-2xl;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.06);
     transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
   }
 
   .premium-card:hover {
-    @apply border-yellow-500/30;
-    box-shadow: 0 0 40px rgba(234, 179, 8, 0.12), 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    @apply border-brand-teal/30;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06), 0 12px 40px rgba(15, 23, 42, 0.08);
     transform: translateY(-2px);
   }
 
-  /* Status badge */
+  /* ─── Status Badge ─── */
   .status-badge {
     @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest;
   }
 
-  /* Section label */
+  /* ─── Section Label ─── */
   .section-label {
-    @apply text-[10px] font-black uppercase tracking-[0.25em] text-yellow-400/80;
+    @apply text-[10px] font-black uppercase tracking-[0.25em] text-brand-teal;
   }
 
-  /* CTA button primary - dark text on yellow background for accessibility and contrast */
+  /* ─── CTA Button Primary (Teal) ─── */
   .cta-primary {
-    @apply flex items-center gap-2 px-5 py-3 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black rounded-xl transition-all duration-200 text-sm shadow-glow active:scale-95;
+    @apply flex items-center gap-2 px-5 py-3 bg-brand-teal hover:bg-brand-teal-light text-white font-bold rounded-xl transition-all duration-200 text-sm shadow-glow active:scale-95;
   }
 
-  /* CTA button secondary */
+  /* ─── CTA Button Secondary ─── */
   .cta-secondary {
-    @apply flex items-center gap-2 px-5 py-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white font-bold rounded-xl transition-all duration-200 text-sm active:scale-95;
+    @apply flex items-center gap-2 px-5 py-3 bg-white hover:bg-brand-section border border-brand-border hover:border-brand-teal/30 text-brand-dark font-bold rounded-xl transition-all duration-200 text-sm active:scale-95;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  }
+
+  /* ─── CTA Button Hire (Yellow/Gold) ─── */
+  .cta-hire {
+    @apply flex items-center gap-2 px-5 py-3 bg-cta-yellow hover:bg-yellow-300 text-brand-dark font-bold rounded-xl transition-all duration-200 text-sm shadow-glow-yellow active:scale-95;
+  }
+
+  /* ─── Dot Grid Pattern ─── */
+  .dot-grid {
+    background-image: radial-gradient(circle, #94A3B8 0.5px, transparent 0.5px);
+    background-size: 24px 24px;
+    opacity: 0.15;
   }
 }
 
-/* Skill bar animation */
+/* ─── Skill Bar Animation ─── */
 @keyframes fillBar {
   from { width: 0%; }
   to { width: var(--target-width); }
@@ -139,7 +181,7 @@
   animation: fillBar 1s ease-out forwards;
 }
 
-/* Counter animation */
+/* ─── Counter Animation ─── */
 @keyframes countUp {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -149,7 +191,7 @@
   animation: countUp 0.5s ease-out forwards;
 }
 
-/* Timeline line draw */
+/* ─── Timeline Line Draw ─── */
 @keyframes drawLine {
   from { height: 0; }
   to { height: 100%; }
@@ -159,7 +201,7 @@
   animation: drawLine 1.5s ease-out forwards;
 }
 
-/* Float animation */
+/* ─── Float Animation ─── */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
@@ -169,26 +211,38 @@
   animation: float 6s ease-in-out infinite;
 }
 
-/* Shimmer */
+/* ─── Shimmer ─── */
 @keyframes shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  background: linear-gradient(90deg, transparent, rgba(15, 157, 138, 0.04), transparent);
   background-size: 200% auto;
   animation: shimmer 3s linear infinite;
 }
 
-/* Role text rotation */
+/* ─── Role Text Rotation ─── */
 @keyframes slideInUp {
   0% { opacity: 0; transform: translateY(16px); }
   10%, 90% { opacity: 1; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(-16px); }
 }
 
-/* Scrollbar */
+/* ─── Subtle Ambient Background ─── */
+@keyframes ambientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.ambient-bg {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F0FDFA 30%, #F8FAFC 70%, #ECFDF5 100%);
+  background-size: 400% 400%;
+  animation: ambientShift 20s ease-in-out infinite;
+}
+
+/* ─── Scrollbar ─── */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -197,7 +251,7 @@
   scrollbar-width: none;
 }
 
-/* Thin scrollbar */
+/* ─── Thin Scrollbar (Light) ─── */
 .thin-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
@@ -205,15 +259,17 @@
   background: transparent;
 }
 .thin-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.1);
+  background: rgba(15, 23, 42, 0.08);
   border-radius: 2px;
 }
 
+/* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .animate-float,
   .skill-bar-fill,
   .timeline-line,
-  .animate-shimmer {
+  .animate-shimmer,
+  .ambient-bg {
     animation: none;
   }
 }

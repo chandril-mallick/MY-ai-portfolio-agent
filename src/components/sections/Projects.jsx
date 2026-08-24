@@ -56,18 +56,20 @@ function FeaturedCard({ project, index }) {
       transition={{ delay: index * 0.1 }}
       className="group perspective-1000"
     >
-      <TiltCard className="h-full bg-slate-900/60 rounded-2xl sm:rounded-[1.75rem] border border-white/5 hover:border-white/20 transition-all duration-300 overflow-hidden">
-      {/* Yellow top accent bar */}
-      <div className="h-0.5 w-full bg-white opacity-10" />
+      <TiltCard className="h-full bg-white rounded-2xl sm:rounded-[1.75rem] border border-brand-border hover:border-brand-teal/30 transition-all duration-300 overflow-hidden"
+        style={{ boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.06)' }}
+      >
+      {/* Teal top accent bar */}
+      <div className="h-0.5 w-full bg-brand-teal opacity-30" />
 
       <div className="p-4 sm:p-6 md:p-8">
         {/* Header */}
         <div className="flex flex-wrap items-start justify-between gap-3 mb-4 sm:mb-5">
           <div className="min-w-0 flex-1">
-            <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white group-hover:text-slate-200 transition-colors tracking-tight leading-tight">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-black text-brand-heading group-hover:text-brand-teal transition-colors tracking-tight leading-tight">
               {project.title}
             </h3>
-            <p className="text-slate-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-1">
+            <p className="text-brand-body text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-1">
               {project.subtitle}
             </p>
           </div>
@@ -75,7 +77,7 @@ function FeaturedCard({ project, index }) {
             href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="touch-target flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all shrink-0"
+            className="touch-target flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2 rounded-xl bg-brand-section hover:bg-soft-teal text-brand-dark text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all shrink-0 border border-brand-border hover:border-brand-teal/30"
           >
             <Github className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             <span className="hidden xs:inline">GitHub</span>
@@ -86,9 +88,9 @@ function FeaturedCard({ project, index }) {
         {project.metrics && (
           <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-5">
             {project.metrics.map((m) => (
-              <div key={m.label} className="flex items-center gap-2 bg-slate-800/50 border border-white/5 rounded-lg sm:rounded-xl px-2.5 sm:px-3 py-1.5 sm:py-2">
-                <span className="text-base sm:text-lg font-black text-white leading-none">{m.value}</span>
-                <span className="text-[8px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-tight">{m.label}</span>
+              <div key={m.label} className="flex items-center gap-2 bg-brand-section border border-brand-border/60 rounded-lg sm:rounded-xl px-2.5 sm:px-3 py-1.5 sm:py-2">
+                <span className="text-base sm:text-lg font-black text-brand-heading leading-none">{m.value}</span>
+                <span className="text-[8px] sm:text-[10px] font-bold text-brand-muted uppercase tracking-widest leading-tight">{m.label}</span>
               </div>
             ))}
           </div>
@@ -97,7 +99,7 @@ function FeaturedCard({ project, index }) {
         {/* Tags */}
         <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5">
           {project.tags.map((tag) => (
-            <span key={tag} className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-slate-800/60 text-white rounded-md sm:rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-white/5">
+            <span key={tag} className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-soft-teal text-brand-teal rounded-md sm:rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-brand-teal/10">
               {tag}
             </span>
           ))}
@@ -105,23 +107,23 @@ function FeaturedCard({ project, index }) {
 
         {/* Problem / Solution */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-5">
-          <div className="bg-slate-800/30 rounded-xl p-3 sm:p-4 border border-white/5">
-            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Problem</p>
-            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">{project.problem}</p>
+          <div className="bg-brand-section rounded-xl p-3 sm:p-4 border border-brand-border/60">
+            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-brand-muted mb-1">Problem</p>
+            <p className="text-brand-body text-xs sm:text-sm leading-relaxed">{project.problem}</p>
           </div>
-          <div className="bg-slate-800/30 rounded-xl p-3 sm:p-4 border border-white/5">
-            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Solution</p>
-            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">{project.solution}</p>
+          <div className="bg-brand-section rounded-xl p-3 sm:p-4 border border-brand-border/60">
+            <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-brand-muted mb-1">Solution</p>
+            <p className="text-brand-body text-xs sm:text-sm leading-relaxed">{project.solution}</p>
           </div>
         </div>
 
         {/* Architecture */}
         {project.architecture && (
-          <div className="flex items-start gap-2 bg-slate-900/50 border border-white/5 rounded-xl p-3 sm:p-4 mb-4 sm:mb-5">
-            <Cpu className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500 shrink-0 mt-0.5" aria-hidden />
+          <div className="flex items-start gap-2 bg-brand-section border border-brand-border/60 rounded-xl p-3 sm:p-4 mb-4 sm:mb-5">
+            <Cpu className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-teal shrink-0 mt-0.5" aria-hidden />
             <div className="min-w-0">
-              <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">Architecture</p>
-              <p className="text-slate-300 text-[10px] sm:text-xs font-mono leading-relaxed break-words">{project.architecture}</p>
+              <p className="text-[9px] font-black uppercase tracking-widest text-brand-muted mb-1">Architecture</p>
+              <p className="text-brand-dark text-[10px] sm:text-xs font-mono leading-relaxed break-words">{project.architecture}</p>
             </div>
           </div>
         )}
@@ -130,7 +132,7 @@ function FeaturedCard({ project, index }) {
         <button
           type="button"
           onClick={() => setExpanded((p) => !p)}
-          className="flex items-center gap-1.5 text-[10px] font-black text-slate-500 hover:text-slate-300 uppercase tracking-widest transition-colors mb-2"
+          className="flex items-center gap-1.5 text-[10px] font-black text-brand-muted hover:text-brand-teal uppercase tracking-widest transition-colors mb-2"
           aria-expanded={expanded}
         >
           {expanded ? 'Hide Details' : 'Show All Highlights'}
@@ -140,8 +142,8 @@ function FeaturedCard({ project, index }) {
         {expanded && (
           <motion.ul initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-2">
             {project.highlights.map((item) => (
-              <li key={item} className="text-slate-400 text-xs sm:text-sm leading-relaxed flex gap-2">
-                <span className="text-yellow-500 shrink-0 mt-0.5">▸</span>
+              <li key={item} className="text-brand-body text-xs sm:text-sm leading-relaxed flex gap-2">
+                <span className="text-brand-teal shrink-0 mt-0.5">▸</span>
                 <span>{item}</span>
               </li>
             ))}
@@ -207,13 +209,13 @@ export default function Projects() {
 
         {loading && (
           <div className="h-28 flex items-center justify-center">
-            <Loader2 className="w-7 h-7 animate-spin text-yellow-500" />
+            <Loader2 className="w-7 h-7 animate-spin text-brand-teal" />
           </div>
         )}
         {error && (
-          <div className="h-28 flex flex-col items-center justify-center text-red-400 gap-3 text-sm">
+          <div className="h-28 flex flex-col items-center justify-center text-red-500 gap-3 text-sm">
             <p className="font-medium">Could not load repositories.</p>
-            <a href={`https://github.com/${GITHUB_USERNAME}`} target="_blank" rel="noopener noreferrer" className="text-yellow-400 font-bold underline">
+            <a href={`https://github.com/${GITHUB_USERNAME}`} target="_blank" rel="noopener noreferrer" className="text-brand-teal font-bold underline">
               View GitHub
             </a>
           </div>
@@ -226,7 +228,8 @@ export default function Projects() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.04 }}
-                className="group bg-slate-900/40 rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden hover:border-yellow-500/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col"
+                className="group bg-white rounded-xl sm:rounded-2xl border border-brand-border overflow-hidden hover:border-brand-teal/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col"
+                style={{ boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)' }}
               >
                 <div className="h-28 sm:h-32 md:h-36 relative overflow-hidden shrink-0">
                   <img
@@ -234,37 +237,37 @@ export default function Projects() {
                     alt={project.title}
                     loading="lazy"
                     decoding="async"
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                     onError={(e) => {
                       e.target.style.display = 'none';
-                      e.target.parentElement.classList.add('bg-yellow-500', 'opacity-40');
+                      e.target.parentElement.classList.add('bg-soft-teal');
                     }}
                   />
                   <div className="absolute bottom-2 left-2 flex gap-1.5 text-white text-[9px] sm:text-[10px] font-bold">
                     <span className="flex items-center gap-1 bg-black/60 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
-                      <Star className="w-2.5 h-2.5 fill-yellow-400 text-yellow-400" /> {project.stars}
+                      <Star className="w-2.5 h-2.5 fill-cta-yellow text-cta-yellow" /> {project.stars}
                     </span>
                     <span className="flex items-center gap-1 bg-black/60 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
                       <GitFork className="w-2.5 h-2.5" /> {project.forks}
                     </span>
                   </div>
                   {project.tags[0] !== 'Software' && (
-                    <span className="absolute top-2 right-2 px-1.5 sm:px-2 py-0.5 bg-black/60 backdrop-blur-sm text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-slate-300 rounded-full">
+                    <span className="absolute top-2 right-2 px-1.5 sm:px-2 py-0.5 bg-brand-teal/90 text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-white rounded-full">
                       {project.tags[0]}
                     </span>
                   )}
                 </div>
                 <div className="p-3 sm:p-4 md:p-5 flex flex-col flex-1">
-                  <h4 className="text-sm sm:text-base font-black text-white capitalize line-clamp-1 mb-1">{project.title}</h4>
-                  <p className="text-slate-400 text-xs sm:text-sm line-clamp-2 mb-3 flex-1">{project.description}</p>
-                  <div className="flex items-center justify-between pt-2.5 border-t border-white/5">
+                  <h4 className="text-sm sm:text-base font-black text-brand-heading capitalize line-clamp-1 mb-1">{project.title}</h4>
+                  <p className="text-brand-body text-xs sm:text-sm line-clamp-2 mb-3 flex-1">{project.description}</p>
+                  <div className="flex items-center justify-between pt-2.5 border-t border-brand-border/60">
                     <a href={project.link} target="_blank" rel="noopener noreferrer"
-                      className="text-[10px] sm:text-xs font-black text-white hover:text-yellow-400 uppercase tracking-wider flex items-center gap-1.5 transition-colors">
+                      className="text-[10px] sm:text-xs font-black text-brand-dark hover:text-brand-teal uppercase tracking-wider flex items-center gap-1.5 transition-colors">
                       Source <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     </a>
                     {project.homepage && (
                       <a href={project.homepage} target="_blank" rel="noopener noreferrer"
-                        className="p-1.5 rounded-lg bg-yellow-600/10 text-yellow-400 hover:bg-yellow-500 hover:text-slate-950 transition-all" aria-label="Live demo">
+                        className="p-1.5 rounded-lg bg-soft-teal text-brand-teal hover:bg-brand-teal hover:text-white transition-all" aria-label="Live demo">
                         <ExternalLink className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                       </a>
                     )}
@@ -279,10 +282,10 @@ export default function Projects() {
               rel="noopener noreferrer"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex flex-col items-center justify-center p-6 sm:p-8 bg-slate-900/30 rounded-xl sm:rounded-2xl border-2 border-dashed border-slate-700 hover:border-yellow-500/50 hover:bg-slate-900/50 transition-all gap-2.5 group"
+              className="flex flex-col items-center justify-center p-6 sm:p-8 bg-brand-section rounded-xl sm:rounded-2xl border-2 border-dashed border-brand-border hover:border-brand-teal/50 hover:bg-soft-teal transition-all gap-2.5 group"
             >
-              <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-slate-500 group-hover:text-white transition-colors" />
-              <p className="font-black text-slate-500 group-hover:text-white text-[10px] sm:text-xs uppercase tracking-widest transition-colors text-center">
+              <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-brand-muted group-hover:text-brand-teal transition-colors" />
+              <p className="font-black text-brand-muted group-hover:text-brand-teal text-[10px] sm:text-xs uppercase tracking-widest transition-colors text-center">
                 All Repositories
               </p>
             </motion.a>
