@@ -17,20 +17,73 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { playSound } from './lib/sound';
 
 const SECTION_CONFIG = {
-  about: { title: 'About Me', Content: About },
-  journey: { title: 'My Story', Content: Journey },
-  startups: { title: 'Building the Future', Content: Startups },
-  projects: { title: 'Featured Projects', Content: Projects },
-  skills: { title: 'Technical Skills', Content: Skills },
-
-  contact: { title: 'Get in Touch', Content: Contact },
-  terminal: { title: 'Interactive Console', Content: TerminalConsole },
+  about: {
+    title: 'About Me',
+    pageTitle: 'About Me — Chandril Mallick | AI Full-Stack Developer',
+    description: 'Learn about Chandril Mallick — B.Tech CSE student, AI Engineer, Samsung AI Intern & IEEE Researcher.',
+    Content: About,
+  },
+  journey: {
+    title: 'My Story',
+    pageTitle: 'My Story & Experience — Chandril Mallick',
+    description: 'Journey of Chandril Mallick from CLI tools to production RAG systems, Samsung Internship & FlyRank AI.',
+    Content: Journey,
+  },
+  startups: {
+    title: 'Building the Future',
+    pageTitle: 'PathShala AI & Startups — Chandril Mallick',
+    description: 'PathShala AI — Voice-first Bengali AI exam copilot for JEE, NEET, WBJEE & UPSC.',
+    Content: Startups,
+  },
+  projects: {
+    title: 'Featured Projects',
+    pageTitle: 'AI Projects & RAG Systems — Chandril Mallick',
+    description: 'Dabba AI local RAG platform, SmartSant-IoT medical prediction, FastAPI & PyTorch projects.',
+    Content: Projects,
+  },
+  skills: {
+    title: 'Technical Skills',
+    pageTitle: 'Technical Skills & Tech Stack — Chandril Mallick',
+    description: 'Tech stack: RAG, LangChain, PyTorch, FastAPI, React, Tailwind CSS, FAISS, Docker, NLP.',
+    Content: Skills,
+  },
+  contact: {
+    title: 'Get in Touch',
+    pageTitle: 'Contact & Hire — Chandril Mallick | Kolkata, India',
+    description: 'Get in touch with Chandril Mallick for AI engineering roles, consulting, or project collaborations.',
+    Content: Contact,
+  },
+  terminal: {
+    title: 'Interactive Console',
+    pageTitle: 'Interactive Developer Console — Chandril Mallick',
+    description: 'Interactive UNIX CLI terminal console to query Chandril Mallick’s projects, stack & research.',
+    Content: TerminalConsole,
+  },
 };
 
 function App() {
-  const [activeSection, setActiveSection] = useState('home');
+  // Read initial section from URL hash if present (#projects, #startups, etc.)
+  const getInitialSection = () => {
+    const hash = window.location.hash.replace('#', '').toLowerCase();
+    return SECTION_CONFIG[hash] ? hash : 'home';
+  };
+
+  const [activeSection, setActiveSection] = useState(getInitialSection);
   const isModalOpen = activeSection !== 'home' && SECTION_CONFIG[activeSection];
   const section = SECTION_CONFIG[activeSection];
+
+  // Dynamic SEO document title & URL hash sync
+  useEffect(() => {
+    if (activeSection === 'home') {
+      document.title = 'Chandril Mallick — AI Engineer, Full-Stack Developer & Founder';
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+    } else if (SECTION_CONFIG[activeSection]) {
+      document.title = SECTION_CONFIG[activeSection].pageTitle;
+      window.history.replaceState(null, '', `#${activeSection}`);
+    }
+  }, [activeSection]);
 
   useEffect(() => {
     if (!isModalOpen) {

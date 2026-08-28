@@ -1,0 +1,22 @@
+{
+  "name": "Chandril Mallick — AI Engineer & Full-Stack Developer",
+  "short_name": "Chandril Dev",
+  "description": "Portfolio of Chandril Mallick — AI Engineer, RAG Specialist, PathShala AI Founder & IEEE Researcher.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B1120",
+  "theme_color": "#0B1120",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

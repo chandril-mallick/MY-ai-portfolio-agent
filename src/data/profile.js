@@ -11,7 +11,7 @@ export const PROFILE = {
   github: 'https://github.com/chandril-mallick',
   portfolio: 'https://chandril-dev.online/',
   resumeUrl: '/Chandril_Mallick_Resume.pdf',
-  avatar: '/WhatsApp Image 2025-12-27 at 19.32.06.jpeg',
+  avatar: '/profile.jpeg',
   openToWork: true,
   calendly: 'https://calendly.com/chandrilmallick1/30min',
 };
