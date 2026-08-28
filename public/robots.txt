@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemap Location
-Sitemap: https://www.chandril-dev.online/sitemap.xml
+Sitemap: https://chandril-dev.online/sitemap.xml

@@ -3,20 +3,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://www.chandril-dev.online/</loc>
+    <loc>https://chandril-dev.online/</loc>
     <lastmod>2026-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://www.chandril-dev.online/tab-image.png</image:loc>
+      <image:loc>https://chandril-dev.online/tab-image.png</image:loc>
       <image:title>Chandril Mallick — AI Engineer &amp; Full-Stack Developer</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://www.chandril-dev.online/profile.jpeg</image:loc>
+      <image:loc>https://chandril-dev.online/profile.jpeg</image:loc>
       <image:title>Chandril Mallick Profile Photo</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://www.chandril-dev.online/pathshala-logo.png</image:loc>
+      <image:loc>https://chandril-dev.online/pathshala-logo.png</image:loc>
       <image:title>PathShala AI Logo</image:title>
     </image:image>
   </url>

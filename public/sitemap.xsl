@@ -107,7 +107,7 @@
           <div class="header">
             <h1>🌐 XML Sitemap</h1>
             <p>Generated for search engines (Googlebot, Bingbot). Styled for human readability.</p>
-            <p style="margin-top: 0.5rem;">Domain: <a href="https://www.chandril-dev.online/">www.chandril-dev.online</a></p>
+            <p style="margin-top: 0.5rem;">Domain: <a href="https://chandril-dev.online/">chandril-dev.online</a></p>
           </div>
           <table>
             <thead>
